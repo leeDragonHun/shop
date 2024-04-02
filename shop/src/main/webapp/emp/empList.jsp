@@ -34,13 +34,32 @@
     int rowPerPage = 10;
     int startRow = (currentPage-1)*rowPerPage;
     
+     // totalRow 를 구하는 SQL 및 dB연동 
+    String totalRowSql = "select count(*) from emp";
+    PreparedStatement totalRowStmt = null;
+    ResultSet totalRowRs = null;
+    totalRowStmt = conn.prepareStatement(totalRowSql);
+    totalRowRs = totalRowStmt.executeQuery();
+    // 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
+   	int totalRow = 0;
+	if(totalRowRs.next()) {
+		totalRow = totalRowRs.getInt("count(*)");
+	}
+	System.out.println(totalRow + " <-- totalRow");
+    // 마지막 페이지는 전체줄수/한페이지에올줄수 예를들어 51페이지면 10으로 나누면 5가된다. 근데 한페이지에 10개씩 오려면 6페이지가 필요하니까 더하기 1을해준다. 그게 lastpage다
+	int lastPage = totalRow / rowPerPage;
+	if(totalRow%rowPerPage != 0) {
+		lastPage = lastPage + 1;
+	}
+	System.out.println(lastPage + " <-- lastPage");
+    
     // 직원 목록 조회
 	PreparedStatement stmt = null;
 	ResultSet rs = null;
 	String sql = "SELECT emp_id empId, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by hire_date desc limit ?, ?";
     stmt = conn.prepareStatement(sql);
-	stmt.setInt(1, startRow);
-	stmt.setInt(2, rowPerPage);
+	stmt.setInt(1, startRow); // (현재페이지 -1)에서 곱하기 rowperPage를 해주면 n번째 페이지의 첫째로 오는 게시글의 순번 즉, 몇번째글인지 계산할 수 있다.
+	stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
     rs = stmt.executeQuery();
     
     // 특수한 형태의 자료구조(RDBMS:mariadb)를 여태껏 사용하였음
@@ -79,12 +98,10 @@
 	<title></title>
 </head>
 <body>
-    <a href="/shop/emp/logoutAction.jsp">로그아웃</a>
-    
-    
     
     <!-- 직원 목록 -->
     <h1>직원 목록</h1>
+    <div><%=currentPage%> 페이지</div>
     <table border="1">
         <tr>
             <td>ID</td>
@@ -108,7 +125,34 @@
         %>
     </table>
     
-    
+    <!-- 페이징 버튼 -->
+            <div>
+                    <%
+                        if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
+                    %>
+                                <a>&#60;&#60;</a>
+                                <a>&#60;</a>
+                                <a href="/shop/emp/empList.jsp?currentPage=<%=currentPage+1%>">&#62;</a>
+                                <a href="/shop/emp/empList.jsp?currentPage=<%=lastPage%>">&#62;&#62;</a>
+                    <%      
+                        } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
+                    %>
+                                <a href="/shop/emp/empList.jsp?currentPage=1">&#60;&#60;</a>
+                                <a href="/shop/emp/empListcurrentPage=<%=currentPage-1%>">&#60;</a>
+                                <a>&#62;</a>
+                                <a>&#62;&#62;</a>
+                    <%      
+                        } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
+                    %>
+                                <a href="/shop/emp/empList.jsp?currentPage=1">&#60;&#60;</a>
+                                <a href="/shop/emp/empList.jsp?currentPage=<%=currentPage-1%>">&#60;</a>
+                                <a href="/shop/emp/empList.jsp?currentPage=<%=currentPage+1%>">&#62;</a>
+                                <a href="/shop/emp/empList.jsp?currentPage=<%=lastPage%>">&#62;&#62;</a>
+                    <%                          
+                        }
+                    %>              
+            </div>                      
+            <!-- end -->
     
     <!-- 팀장만 보이는 Form(로그인 권한 부여)  -->
 <%    
@@ -120,6 +164,7 @@
         // "팀장"일 때만 보여지는 폼(로그인 권한 관리폼)
         if(empJob.equals("팀장")){
          %>
+            <div>팀장만 보이는 Form<br>로그인 권한 부여 : </div>
             <form mothod="post" action="/shop/emp/modifyEmpActive.jsp">
                 <table>
                     <tr>
@@ -144,8 +189,11 @@
          <%   
         }
     }
-// 자원반납
-conn.close();
+%>        
+    <a href="/shop/emp/logoutAction.jsp">로그아웃</a>
+<%
+    // 자원반납
+    conn.close();
 %>
 </body>
 </html>
