@@ -176,11 +176,11 @@
         HashMap<String, Object> m = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
         if((Integer)(m.get("grade")) > 0) {
          %>
-            <div>팀장만 보이는 Form<br>로그인 권한 부여 : </div>
+            <div>아래는 팀장만 보이는 화면입니다.</div>
             <form mothod="post" action="/shop/emp/modifyEmpActive.jsp">
                 <table>
                     <tr>
-                        <td>권한 부여할 직원 아이디</td>
+                        <td>로그인 권한 부여할 직원 아이디</td>
                         <td><input type ="text" name = "requestEmp"></td>
                         <input type="hidden" name="loginId" value="<%= loginId %>">
                         <td><button type="submit">권한 부여</button></td>
@@ -191,7 +191,7 @@
             <form mothod="post" action="/shop/emp/modifyEmpActive2.jsp">
                 <table>
                     <tr>
-                        <td>권한 해제할 직원 아이디</td>
+                        <td>로그인 권한 해제할 직원 아이디</td>
                         <td><input type ="text" name = "retireEmp"></td>
                         <input type="hidden" name="loginId" value="<%= loginId %>">
                         <td><button type="submit">권한 해제</button></td>
@@ -200,9 +200,7 @@
             </form>
          <%   
         }
-%>        
-    <a href="/shop/emp/logoutAction.jsp">로그아웃</a>
-<%
+
     // 자원반납
     conn.close();
 %>
