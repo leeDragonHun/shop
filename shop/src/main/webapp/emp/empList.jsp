@@ -7,7 +7,6 @@
 
     /*  Controller Layer */
     // 로그오프면(세션값이 없으면) 로그인 폼으로 가기
-    String loginEmp = (String)session.getAttribute("loginEmp");
     if(session.getAttribute("loginEmp") == null){ 
         response.sendRedirect("/shop/emp/empLoginForm.jsp"); 
         return; // 종료
@@ -56,7 +55,7 @@
     // 직원 목록 조회
 	PreparedStatement stmt = null;
 	ResultSet rs = null;
-	String sql = "SELECT emp_id empId, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by hire_date desc limit ?, ?";
+	String sql = "SELECT emp_id empId, grade, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by hire_date desc limit ?, ?";
     stmt = conn.prepareStatement(sql);
 	stmt.setInt(1, startRow); // (현재페이지 -1)에서 곱하기 rowperPage를 해주면 n번째 페이지의 첫째로 오는 게시글의 순번 즉, 몇번째글인지 계산할 수 있다.
 	stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
@@ -73,6 +72,7 @@
     while(rs.next()){
     	HashMap<String, Object> m = new HashMap<String, Object>();
         m.put("empId", rs.getString("empId"));
+        m.put("grade", rs.getString("grade"));
         m.put("empName", rs.getString("empName"));
         m.put("empJob", rs.getString("empJob"));
         m.put("hireDate", rs.getString("hireDate"));
@@ -98,27 +98,43 @@
 	<title></title>
 </head>
 <body>
-    
+    <!-- empMenu.jsp include : 주체(서버) vs redirect(주체:클라이언트) 어디 있는 거 불러올 수 있는-->
+    <!-- 주의사항으로는 주체가 서버이기 때문에 include할때는 절대주소로 사용 ./ 이런거 x -->
+    <jsp:include page="/emp/inc/empMenu.jsp"></jsp:include>
+
     <!-- 직원 목록 -->
     <h1>직원 목록</h1>
     <div><%=currentPage%> 페이지</div>
     <table border="1">
         <tr>
             <td>ID</td>
+            <td>등급</td>
             <td>이름</td>
             <td>직책</td>
             <td>고용날짜</td>
             <td>권한</td>
         </tr>
         <%
+            
             for(HashMap<String, Object> m : list){
         %>
         <tr>
             <td><%=(String) (m.get("empId"))%></td>
+            <td><%=(String) (m.get("grade"))%></td>
             <td><%=(String) (m.get("empName"))%></td>
             <td><%=(String) (m.get("empJob"))%></td>
             <td><%=(String) (m.get("hireDate"))%></td>
-            <td><%=(String) (m.get("active"))%></td>
+            <td>
+                <%=(String) (m.get("active"))%>
+                <%
+                     HashMap<String, Object> sm = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
+                     if((Integer)(sm.get("grade")) > 0) {
+                %>
+                <a href="/shop/emp/activeChange.jsp?empId=<%=(String)(m.get("empId")) %>&active=<%=(String)(m.get("active"))%>">변경</a>
+                <%
+                    }
+                %>
+            </td>
         </tr>
         <%
             }
@@ -155,14 +171,10 @@
             <!-- end -->
     
     <!-- 팀장만 보이는 Form(로그인 권한 부여)  -->
-<%    
-    while(rs2.next()){
-        // 2번째 쿼리로 불러온 현재 로그인 아이디의 emp_job
-        String empJob = rs2.getString("empJob");
-        System.out.println("현재 아이디의 emp_job : " + empJob);
-        
+        <%    
         // "팀장"일 때만 보여지는 폼(로그인 권한 관리폼)
-        if(empJob.equals("팀장")){
+        HashMap<String, Object> m = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
+        if((Integer)(m.get("grade")) > 0) {
          %>
             <div>팀장만 보이는 Form<br>로그인 권한 부여 : </div>
             <form mothod="post" action="/shop/emp/modifyEmpActive.jsp">
@@ -188,7 +200,6 @@
             </form>
          <%   
         }
-    }
 %>        
     <a href="/shop/emp/logoutAction.jsp">로그아웃</a>
 <%

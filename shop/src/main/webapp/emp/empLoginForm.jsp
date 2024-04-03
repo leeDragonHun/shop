@@ -3,7 +3,6 @@
     System.out.println("=====empLoginForm.jsp=======================================");
 
    // 로그인 되어있으면(세션값 있으면) List로 가기
-    String loginEmp = (String)session.getAttribute("loginEmp");
     if(session.getAttribute("loginEmp") != null){ 
         response.sendRedirect("/shop/emp/empList.jsp"); 
         return; // 종료
