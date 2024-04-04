@@ -45,7 +45,7 @@
         currentPage = Integer.parseInt(request.getParameter("currentPage"));
     }
 	// 페이징	
-	int rowPerPage = 10; // 전체 아이템 수
+	int rowPerPage = 5; // 전체 아이템 수
 	int startRow = ((currentPage-1)*rowPerPage);
     
     // all과 카테고리 분기문
@@ -143,24 +143,50 @@
 			}
 		%>
         <div><%=currentPage%> Page</div>
-        <table border="1">
-            <tr>
-                <td>제목</td>
-                <td>가격</td>
-                <td>재고</td>
-            </tr>
         <%
                 for(HashMap<String, Object> m2 : moneyList){
         %>
-                    <tr>
-                        <td><%=(String) (m2.get("moneyTitle"))%></td>
-                        <td><%=(Integer) (m2.get("moneyPrice"))%></td>
-                        <td><%=(Integer) (m2.get("moneyAmount"))%></td>
-                    </tr>
+                	<div style="width:20%; float:left">
+                        <table border="1" width="90%" height="90%">
+                            <tr>
+                                <td colspan="2">
+                                <%
+                                    if(category.equals("미국화폐")){
+                                %>
+                                        <img alt="화폐사진" src="/shop/emp/img/usa.jpg" style="width:100%; height:100%;">
+                                <%   
+                                    }else if(category.equals("일본화폐")){
+                                %>
+                                        <img alt="화폐사진" src="/shop/emp/img/japan.jpg" style="width:100%; height:100%;">
+                                <%   
+                                    }else if(category.equals("유럽연합화폐")){
+                                %>
+                                        <img alt="화폐사진" src="/shop/emp/img/eu.jpg" style="width:100%; height:100%;">
+                                <%   
+                                    }else if(category.equals("한국화폐")){
+                                %>
+                                        <img alt="화폐사진" src="/shop/emp/img/korea.png" style="width:100%; height:100%;">
+                                <%   
+                                    }else{
+                                %>
+                                    	<img alt="화폐사진" src="/shop/emp/img/all.jpg" style="width:100%; height:100%;">
+                                <%      
+                                    }
+                                %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><%=(String) (m2.get("moneyTitle"))%></td>
+                            </tr>
+                            <tr>
+                                <td><%=(Integer) (m2.get("moneyPrice"))%></td>
+                                <td><%=(Integer) (m2.get("moneyAmount"))%></td>
+                            </tr>
+                        </table>
+                    </div>
         <%
                 }
         %>    
-        </table>
         <!-- 페이징 버튼 -->
         <div>
                 <%
@@ -168,22 +194,22 @@
                 %>
                             <a>&#60;&#60;</a>
                             <a>&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=currentPage+1%>">&#62;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=lastPage%>">&#62;&#62;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
                 <%      
                     } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
                 %>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=1">&#60;&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=currentPage-1%>">&#60;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
                             <a>&#62;</a>
                             <a>&#62;&#62;</a>
                 <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
                 %>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=1">&#60;&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=currentPage-1%>">&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=currentPage+1%>">&#62;</a>
-                            <a href="/shop/emp/goodsList.jsp?currentPage=<%=lastPage%>">&#62;&#62;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
                 <%                          
                     }
                 %>              

@@ -19,5 +19,5 @@
     <br>
 	<span><a href="/shop/emp/empList.jsp">사원관리</a></span>
 	<span><a href="/shop/emp/categoryList.jsp">/카테고리관리</a></span>
-	<span><a href="/shop/emp/goodsList.jsp">/상품관리</a></span>
+	<span><a href="/shop/emp/goodsList.jsp?category=all">/상품관리</a></span>
 </div>
