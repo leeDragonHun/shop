@@ -95,7 +95,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>사원 관리</title>
 </head>
 <body>
     <!-- empMenu.jsp include : 주체(서버) vs redirect(주체:클라이언트) 어디 있는 거 불러올 수 있는-->

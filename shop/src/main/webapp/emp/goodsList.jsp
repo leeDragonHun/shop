@@ -110,7 +110,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>goodsList</title>
+	<title>상품관리</title>
 </head>
 <body>
 
