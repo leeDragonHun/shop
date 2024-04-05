@@ -107,7 +107,7 @@
     <div><%=currentPage%> 페이지</div>
     <table border="1">
         <tr>
-            <td>ID</td>
+            <td>아이디</td>
             <td>등급</td>
             <td>이름</td>
             <td>직책</td>
