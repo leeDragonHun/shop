@@ -58,7 +58,8 @@
      %>
     
     <h1>상품등록</h1>
-    <form method="post" action="/shop/emp/addGoodsAction.jsp">
+    <form method="post" action="/shop/emp/addGoodsAction.jsp"
+        enctype="multipart/form-data">
         <div>
             카테고리 : 
             <select name="category">
@@ -78,6 +79,10 @@
         <div>
             제목 : 
             <input type="text" name="moneyTitle">
+        </div>
+        <div>
+            사진 : 
+            <input type="file" name="moneyImg">
         </div>
         <div>
             가격 : 

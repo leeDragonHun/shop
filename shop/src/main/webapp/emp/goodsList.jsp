@@ -16,8 +16,7 @@
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
 	ResultSet rs1 = null;
-	conn = DriverManager.getConnection(
-			"jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
+	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
     
     
 %>
@@ -52,10 +51,10 @@
     String sql2 = null;
     String totalRowSql = null;
     if(category == null || category.equals("all")){
-        sql2 = "select money_title moneyTitle, money_price moneyPrice, money_amount moneyAmount from goods order by update_date desc limit ?, ?"; // 전체출력
+        sql2 = "select money_title moneyTitle, filename, money_price moneyPrice, money_amount moneyAmount from goods order by update_date desc limit ?, ?"; // 전체출력
         totalRowSql = "select count(*) from goods";
     }else{
-        sql2 = "select money_title moneyTitle, money_price moneyPrice, money_amount moneyAmount from goods where category = '" + category + "' order by update_date desc limit ?, ?"; // 카테고리별 출력
+        sql2 = "select money_title moneyTitle, filename, money_price moneyPrice, money_amount moneyAmount from goods where category = '" + category + "' order by update_date desc limit ?, ?"; // 카테고리별 출력
         totalRowSql = "select count(*) from goods where category = '" + category + "'";
     }
     	PreparedStatement stmt2 = null;
@@ -86,10 +85,12 @@
 	System.out.println(lastPage + " <-- lastPage");
     //---------------------------------------------------------------------------------------------
     
+    // 굿즈리스트 값입력
     ArrayList<HashMap<String, Object>> moneyList = new ArrayList<HashMap<String, Object>>();
 	while(rs2.next()) {
 		HashMap<String, Object> m2 = new HashMap<String, Object>();
 		m2.put("moneyTitle", rs2.getString("moneyTitle"));
+		m2.put("filename", rs2.getString("filename"));
 		m2.put("moneyPrice", rs2.getInt("moneyPrice"));
 		m2.put("moneyAmount", rs2.getInt("moneyAmount"));
 		moneyList.add(m2);
@@ -150,29 +151,7 @@
                         <table border="1" width="90%" height="90%">
                             <tr>
                                 <td colspan="2">
-                                <%
-                                    if(category.equals("미국화폐")){
-                                %>
-                                        <img alt="화폐사진" src="/shop/emp/img/usa.jpg" style="width:100%; height:100%;">
-                                <%   
-                                    }else if(category.equals("일본화폐")){
-                                %>
-                                        <img alt="화폐사진" src="/shop/emp/img/japan.jpg" style="width:100%; height:100%;">
-                                <%   
-                                    }else if(category.equals("유럽연합화폐")){
-                                %>
-                                        <img alt="화폐사진" src="/shop/emp/img/eu.jpg" style="width:100%; height:100%;">
-                                <%   
-                                    }else if(category.equals("한국화폐")){
-                                %>
-                                        <img alt="화폐사진" src="/shop/emp/img/korea.png" style="width:100%; height:100%;">
-                                <%   
-                                    }else{
-                                %>
-                                    	<img alt="화폐사진" src="/shop/emp/img/all.jpg" style="width:100%; height:100%;">
-                                <%      
-                                    }
-                                %>
+                                    <img alt="화폐사진" src="/shop/upload/<%=(String)(m2.get("filename")) %>" style="width:100%; height:100%;">
                                 </td>
                             </tr>
                             <tr>
