@@ -19,13 +19,13 @@
 <%
     String category = request.getParameter("category");
     String empId = request.getParameter("empId");
-    String moneyTitle = request.getParameter("moneyTitle");
-    String moneyImg = request.getParameter("moneyImg");
-    int moneyPrice = Integer.parseInt(request.getParameter("moneyPrice"));
-    int moneyAmount = Integer.parseInt(request.getParameter("moneyAmount"));
-    String moneyContent = request.getParameter("moneyContent");
+    String goodsTitle = request.getParameter("goodsTitle");
+    String goodsImg = request.getParameter("goodsImg");
+    int goodsPrice = Integer.parseInt(request.getParameter("goodsPrice"));
+    int goodsAmount = Integer.parseInt(request.getParameter("goodsAmount"));
+    String goodsContent = request.getParameter("goodsContent");
     
-    Part part = request.getPart("moneyImg");
+    Part part = request.getPart("goodsImg");
     String originalName = part.getSubmittedFileName();
     // 원본이름에서 확장자만 분리
     int dotIdx = originalName.lastIndexOf(".");
@@ -39,22 +39,22 @@
     System.out.println("category : " + category); 
     System.out.println("empId : " + empId); 
     System.out.println("filename : " + filename); 
-    System.out.println("moneyImg : " + moneyImg); 
-    System.out.println("moneyPrice : " + moneyPrice); 
-    System.out.println("moneyAmount : " + moneyAmount); 
-    System.out.println("moneyContent : " + moneyContent); 
+    System.out.println("goodsImg : " + goodsImg); 
+    System.out.println("goodsPrice : " + goodsPrice); 
+    System.out.println("goodsAmount : " + goodsAmount); 
+    System.out.println("goodsContent : " + goodsContent); 
     
     Class.forName("org.mariadb.jdbc.Driver");
-    String sql = "insert into goods(category, emp_id, money_title, filename, money_content, money_price, money_amount, update_date, create_date) values(?,?,?,?,?,?,?, now(), now())";
+    String sql = "insert into goods(category, emp_id, goods_title, filename, goods_content, goods_price, goods_amount, update_date, create_date) values(?,?,?,?,?,?,?, now(), now())";
     Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
     PreparedStatement stmt = conn.prepareStatement(sql);
 	stmt.setString(1,category);
 	stmt.setString(2,empId);
-	stmt.setString(3,moneyTitle);
+	stmt.setString(3,goodsTitle);
 	stmt.setString(4,filename);
-	stmt.setString(5,moneyContent);
-	stmt.setInt(6, moneyPrice);
-	stmt.setInt(7, moneyAmount);
+	stmt.setString(5,goodsContent);
+	stmt.setInt(6, goodsPrice);
+	stmt.setInt(7, goodsAmount);
     
     System.out.println("stmt확인 : " + stmt);
     
@@ -83,7 +83,7 @@
 <!-- Controller Layer -->
 <%
     if(row == 1){
-        response.sendRedirect("/shop/emp/goodsList.jsp");
+        response.sendRedirect("/shop/emp/goodsList.jsp?category=all");
     } else {
     	String errMsg = URLEncoder.encode("작성에 실패했습니다. 확인 후 다시 입력하세요.", "utf-8");
     	response.sendRedirect("/shop/emp/addGoodsForm.jsp?errMsg=" + errMsg);

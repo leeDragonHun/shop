@@ -78,41 +78,25 @@
         </div>
         <div>
             제목 : 
-            <input type="text" name="moneyTitle">
+            <input type="text" name="goodsTitle">
         </div>
         <div>
             사진 : 
-            <input type="file" name="moneyImg">
+            <input type="file" name="goodsImg">
         </div>
         <div>
             가격 : 
-            <input type="number" name="moneyPrice">
+            <input type="number" name="goodsPrice">
         </div>
         <div>
             재고 : 
-            <input type="number" name="moneyAmount">
+            <input type="number" name="goodsAmount">
         </div>
         <div>
             내용 : 
-            <textarea rows="5" cols="50" name="moneyContent"></textarea>
+            <textarea rows="5" cols="50" name="goodsContent"></textarea>
         </div>
         <button type="submit">상품등록</button>
     </form>
 
 </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
