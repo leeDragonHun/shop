@@ -14,6 +14,16 @@
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
+    
+    // 검색어 값 요청
+    String searchWord = "";
+    if(request.getParameter("searchWord") != null) {
+    	searchWord = request.getParameter("searchWord");
+    }
+    System.out.println("searchWord : " + searchWord);
+    
+    // 카테고리 값 요청
+    System.out.println("category : " + category);
 %>
 <!-- Model Layer -->
 <%
@@ -21,7 +31,7 @@
     // 카테고리 선택 메뉴
 	PreparedStatement stmt1 = null;
 	ResultSet rs1 = null;
-	String sql1 = "select category, count(*) cnt from goods group by category order by category asc";
+	String sql1 = "select category, count(*) cnt from goods group by category order by create_date asc";
 	stmt1 = conn.prepareStatement(sql1);
 	rs1 = stmt1.executeQuery();
 	ArrayList<HashMap<String, Object>> categoryList =
@@ -43,22 +53,41 @@
 	int rowPerPage = 4; // 전체 아이템 수
 	int startRow = ((currentPage-1)*rowPerPage);
     
-    // 리스트 나열시 all과 카테고리 분기문
+    // sql2 정해지는 분기문
     String sql2 = null;
     String totalRowSql = null;
-    if(category == null || category.equals("all")){
-        sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods order by update_date desc limit ?, ?"; // 전체출력
+    
+    // 전체에 관한거
+    if((searchWord != null || !searchWord.equals("")) && category.equals("all")){
+        System.out.println("검색어가 있고 카테고리가 all");
+    	sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where goods_title like '%"+searchWord+ "%' limit ?, ?";
+    	totalRowSql = "select count(*) from goods where goods_title like '%"+searchWord+ "%'";
+	}else if((searchWord == null || searchWord.equals("")) && category.equals("all")){
+		System.out.println("검색어가 없고 카테고리가 all");
+		sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods  limit ?, ?";
         totalRowSql = "select count(*) from goods";
-    }else{
-        sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where category = '" + category + "' order by update_date desc limit ?, ?"; // 카테고리별 출력
-        totalRowSql = "select count(*) from goods where category = '" + category + "'";
     }
-    	PreparedStatement stmt2 = null;
-        stmt2 = conn.prepareStatement(sql2);
-    	stmt2.setInt(1,startRow);
-    	stmt2.setInt(2,rowPerPage);
-        ResultSet rs2 = null;
-        rs2 = stmt2.executeQuery();
+    
+    // 카테고리 값 있을 때(all 아니고 다른 값 있을 때)
+    if((searchWord != null || !searchWord.equals("")) && !category.equals("all")){
+    	System.out.println("검색어가 있고 카테고리가 선택됨");
+    	sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where category = '"+category+"' and goods_title like '%"+searchWord+ "%' limit ?, ?";
+    	totalRowSql = "select count(*) from goods where category = '" + category + "' and goods_title like '%"+searchWord+ "%'";
+	}else if((searchWord == null || searchWord.equals(""))&& !category.equals("all")){
+		System.out.println("검색어가 없고 카테고리가 선택됨");
+		sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods  limit ?, ?";
+        totalRowSql = "select count(*) from goods";
+    }
+    
+    System.out.println("sql2 : " + sql2);
+    System.out.println("totalRowSql : " + totalRowSql);
+    
+	PreparedStatement stmt2 = null;
+    stmt2 = conn.prepareStatement(sql2);
+	stmt2.setInt(1,startRow);
+	stmt2.setInt(2,rowPerPage);
+    ResultSet rs2 = null;
+    rs2 = stmt2.executeQuery();
         
     // totalRow 를 구하는 SQL 및 dB연동-----------------------------------------------------------
    PreparedStatement totalRowStmt = null;
@@ -71,14 +100,14 @@
 	if(totalRowRs.next()) {
 		totalRow = totalRowRs.getInt("count(*)");
 	}
-	System.out.println(totalRow + " <-- totalRow");
+	System.out.println("totalRow : " + totalRow);
     
    // 마지막 페이지는 전체줄수/한페이지에올줄수 예를들어 51페이지면 10으로 나누면 5가된다. 근데 한페이지에 10개씩 오려면 6페이지가 필요하니까 더하기 1을해준다. 그게 lastpage다
 	int lastPage = totalRow / rowPerPage;
 	if(totalRow%rowPerPage != 0) {
 		lastPage = lastPage + 1;
 	}
-	System.out.println(lastPage + " <-- lastPage");
+	System.out.println("lastPage : " + lastPage);
     //---------------------------------------------------------------------------------------------
     
     // 굿즈리스트 값입력
@@ -105,6 +134,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="UTF-8">
 	<title>상품관리</title>
 </head>
@@ -115,9 +145,7 @@
 		<jsp:include page="/emp/inc/empMenu.jsp"></jsp:include>
 	</div>
 	
-	<div>
-		<a href="/shop/emp/addGoodsForm.jsp">상품등록</a>	
-	</div>
+
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div>
 		<a href="/shop/emp/goodsList.jsp?category=all">
@@ -139,7 +167,10 @@
 		<%		
 			}
 		%>
-        <div><%=currentPage%> Page</div>
+    <br>
+        <div>
+           <a href="/shop/emp/addGoodsForm.jsp">상품등록</a><div><%=currentPage%> Page</div>
+        </div>
         <%
                 for(HashMap<String, Object> m2 : goodsList){
         %>
@@ -163,32 +194,77 @@
                 }
         %>    
         <!-- 페이징 버튼 -->
-        <div>
-                <%
-                    if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
-                %>
-                            <a>&#60;&#60;</a>
-                            <a>&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
-                <%      
+        <div style="clear:left">
+            <%
+                if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
+                    if(lastPage == 1){
+            %>
+                    	<a>&#60;&#60;</a>
+                        <a>&#60;</a>
+                        <a>&#62;</a>
+                        <a>&#62;&#62;</a>                        
+            <%
+                    }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
+            %>
+                        <a>&#60;&#60;</a>
+                        <a>&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
+            <%      
                     } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
-                %>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
-                            <a>&#62;</a>
-                            <a>&#62;&#62;</a>
-                <%      
+            %>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
+                        <a>&#62;</a>
+                        <a>&#62;&#62;</a>
+            <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
-                %>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
-                            <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
-                <%                          
+            %>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
+            <%                          
                     }
-                %>              
+                }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
+                    if(lastPage == 1){
+            %>
+                        <a>&#60;&#60;</a>
+                        <a>&#60;</a>
+                        <a>&#62;</a>
+                        <a>&#62;&#62;</a>                        
+            <%
+                    }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
+            %>
+                        <a>&#60;&#60;</a>
+                        <a>&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
+            <%      
+                    } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
+            %>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
+                        <a>&#62;</a>
+                        <a>&#62;&#62;</a>
+            <%      
+                    } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
+            %>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1">&#60;&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>">&#60;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>">&#62;</a>
+                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>">&#62;&#62;</a>
+            <%                          
+                    }
+                }
+            %>              
         </div>
 	</div>
+    <form mothod="get" action="/shop/emp/goodsList.jsp">
+        상품 검색 : 
+        <input type="text" name="searchWord">
+        <input type="hidden" name="category" value="<%=category %>">
+        <button type="submit">검색</button> 
+    </form>
 </body>
 </html>

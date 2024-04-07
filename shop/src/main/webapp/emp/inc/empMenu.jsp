@@ -12,7 +12,7 @@
     <span>
         이름 : 
         <a href="/shop/emp/empOne.jsp">
-            <%=(String)(loginMember.get("empName"))%>님
+            <%=(String)(loginMember.get("empName"))%>
         </a>
     </span>
 	<span><a href="/shop/emp/empList.jsp">사원관리</a></span>
