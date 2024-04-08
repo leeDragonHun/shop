@@ -86,11 +86,11 @@
         </div>
         <div>
             가격 : 
-            <input type="number" name="goodsPrice">
+            <input type="text" name="goodsPrice">
         </div>
         <div>
             재고 : 
-            <input type="number" name="goodsAmount">
+            <input type="text" name="goodsAmount">
         </div>
         <div>
             내용 : 

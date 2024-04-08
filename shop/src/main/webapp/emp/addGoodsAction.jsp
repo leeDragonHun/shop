@@ -17,6 +17,8 @@
 %>  
 <!-- Model Layer -->
 <%
+
+
     String category = request.getParameter("category");
     String empId = request.getParameter("empId");
     String goodsTitle = request.getParameter("goodsTitle");
@@ -24,8 +26,12 @@
     int goodsPrice = Integer.parseInt(request.getParameter("goodsPrice"));
     int goodsAmount = Integer.parseInt(request.getParameter("goodsAmount"));
     String goodsContent = request.getParameter("goodsContent");
-    
     Part part = request.getPart("goodsImg");
+    if(category == null || empId == null || goodsTitle == null || goodsImg == null || request.getParameter("goodsPrice") == null || request.getParameter("goodsAmount") == null || goodsContent == null){
+        String errMsg = URLEncoder.encode("작성에 실패했습니다. 모든 항목을 채워주세요.", "utf-8");
+        response.sendRedirect("/shop/emp/addGoodsForm.jsp?errMsg=" + errMsg);
+        return;
+    }
     String originalName = part.getSubmittedFileName();
     // 원본이름에서 확장자만 분리
     int dotIdx = originalName.lastIndexOf(".");
@@ -72,6 +78,10 @@
         
         os.close();
         is.close();
+    } else {
+        String errMsg = URLEncoder.encode("작성에 실패했습니다. 확인 후 다시 입력하세요.", "utf-8");
+        response.sendRedirect("/shop/emp/addGoodsForm.jsp?errMsg=" + errMsg);
+        return;
     }
     
     /* 

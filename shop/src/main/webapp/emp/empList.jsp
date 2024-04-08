@@ -55,7 +55,7 @@
     // 직원 목록 조회
 	PreparedStatement stmt = null;
 	ResultSet rs = null;
-	String sql = "SELECT emp_id empId, grade, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by hire_date asc limit ?, ?";
+	String sql = "SELECT emp_id empId, grade, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by emp_id asc limit ?, ?";
     stmt = conn.prepareStatement(sql);
 	stmt.setInt(1, startRow); // (현재페이지 -1)에서 곱하기 rowperPage를 해주면 n번째 페이지의 첫째로 오는 게시글의 순번 즉, 몇번째글인지 계산할 수 있다.
 	stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
