@@ -42,7 +42,7 @@
 		loginEmp.put("empName", rs.getString("empName"));
 		loginEmp.put("grade", rs.getInt("grade"));
         
-		session.setAttribute("loginEmp", loginEmp);	
+		session.setAttribute("loginEmp", loginEmp);
         
 		HashMap<String, Object> m = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
 		System.out.println((String)(m.get("empId"))); // 로그인 된 empId
