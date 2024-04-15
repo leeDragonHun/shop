@@ -4,6 +4,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*" %>
 <%@ page import="java.nio.file.*" %>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====deleteCategoryList.jsp=================================");
 
@@ -19,10 +20,7 @@
     System.out.println("categoryName : " + categoryName);
     
     // DB연동
-    Class.forName("org.mariadb.jdbc.Driver");
-    Connection conn = null;
-    conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
-    
+    Connection conn = DBHelper.getConnection();    
     // 사용할 쿼리문 선언
     String sql = "DELETE FROM category WHERE category = ?";
     String sql2 = "SELECT filename FROM goods WHERE category= ?";

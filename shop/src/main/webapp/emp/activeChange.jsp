@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====activeChange.jsp=======================================");
 
@@ -22,8 +23,7 @@
 	
 	String sql = null;
 	sql = "update emp set active = ? where emp_id = ?";
-	Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
+	Connection conn = DBHelper.getConnection();
 	PreparedStatement stmt = null;
 	stmt = conn.prepareStatement(sql);
 	stmt.setString(1, active);

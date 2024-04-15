@@ -2,6 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.net.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====empList.jsp============================================");
 
@@ -18,9 +19,7 @@
     System.out.println("loginId : " + loginId);
 
     // DB 연동
-    Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = null;
-	conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
+    Connection conn = DBHelper.getConnection();
     
     /* Model Layer */
     // 현재 페이지를 1로 설정

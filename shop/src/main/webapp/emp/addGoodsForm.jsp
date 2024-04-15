@@ -2,6 +2,7 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.net.*"%>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====addGoodsForm.jsp===========================================");
     // 인증분기  : 세션변수 이름 - loginEmp
@@ -9,13 +10,10 @@
         response.sendRedirect("/shop/emp/empLoginForm.jsp");
         return;
     }
-    //
-    Class.forName("org.mariadb.jdbc.Driver");
-    Connection conn = null;
+    // DB연동
+    Connection conn = DBHelper.getConnection();
     PreparedStatement stmt1 = null;
     ResultSet rs1 = null;
-    conn = DriverManager.getConnection(
-            "jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
     
     String sql1 = "select category from category";
     stmt1 = conn.prepareStatement(sql1);

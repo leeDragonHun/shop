@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     System.out.println("===empOne.jsp===============================================");
+    System.out.println("작업중");
 %>
 <!DOCTYPE html>
 <html>

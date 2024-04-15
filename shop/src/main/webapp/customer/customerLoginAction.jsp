@@ -2,7 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import = "java.net.*" %>
 <%@ page import = "java.util.*" %>
-<%@ include file="/emp/inc/jdbc.jsp"%><!-- db연동 -->
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====customerLoginAction.jsp=====================================");
     if(session.getAttribute("loginCus") != null) {
@@ -20,6 +20,7 @@
     
     // id, pw가 db와 일치하는 지 확인
     String sql = "SELECT cus_id cusId, cus_pw cusPw FROM customer WHERE cus_id = ? AND cus_pw = PASSWORD(?)";
+    Connection conn = DBHelper.getConnection();
     PreparedStatement stmt = conn.prepareStatement(sql);
     stmt.setString(1,id);
     stmt.setString(2,pw);

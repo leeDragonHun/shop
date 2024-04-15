@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.net.URLEncoder"%>
-<%@ include file="/emp/inc/jdbc.jsp"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="shop.dao.*" %>
+<%@ page import="java.net.URLEncoder"%>
 <%
     System.out.println("=====checkedIdAction.jsp====================================");
 
@@ -11,7 +12,7 @@
     String id = request.getParameter("id");
     System.out.println("id : " + id);
     
-    
+    Connection conn = DBHelper.getConnection();
     
     String sql = null;
     PreparedStatement stmt = null;

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="java.net.*"%>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====addCategoryList.jsp====================================");
 
@@ -16,9 +17,7 @@
     System.out.println("categoryName : " + categoryName);
     
     // DB연동
-    Class.forName("org.mariadb.jdbc.Driver");
-    Connection conn = null;
-    conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
+    Connection conn = DBHelper.getConnection();
 
     // 사용할 쿼리문 선언
     String sql = "INSERT INTO category(category) VALUES(?)";

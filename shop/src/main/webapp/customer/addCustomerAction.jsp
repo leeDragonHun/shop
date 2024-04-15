@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
-<%@ include file="/emp/inc/jdbc.jsp"%>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====addCustomerAction.jsp====================================");
     if(session.getAttribute("loginCus")  != null) {
@@ -22,6 +22,7 @@
     System.out.println("birth : " + birth);
     System.out.println("gender : " + gender);
     
+    Connection conn = DBHelper.getConnection();
     String sql = "INSERT INTO customer(cus_id, cus_pw, cus_name, birth, gender, update_date, create_date) VALUES(?, password(?), ?, ?, ?, NOW(), NOW())";
     PreparedStatement stmt = conn.prepareStatement(sql);
     

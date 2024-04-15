@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.net.*" %>
+<%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====modifyEmpActive.jsp====================================");
  
@@ -16,11 +17,8 @@
     System.out.println("requestEmp : " + requestEmp);
     
     // DB연동 및 쿼리문 추가
-	Connection conn = null;
+    Connection conn = DBHelper.getConnection();
 	PreparedStatement stmt = null;
-    Class.forName("org.mariadb.jdbc.Driver");
-	conn = DriverManager.getConnection(
-			"jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
 	String sql = "UPDATE emp SET ACTIVE='ON' WHERE emp_id = ? ";
     stmt = conn.prepareStatement(sql);
     stmt.setString(1,requestEmp);

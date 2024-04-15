@@ -4,6 +4,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.io.*" %>
 <%@ page import="java.nio.file.*" %>
+<%@ page import="shop.dao.*" %>
 <!-- Controller Layer -->
 <%
     System.out.println("=====addGoodsAction.jsp=====================================");
@@ -45,9 +46,8 @@
     System.out.println("goodsAmount : " + goodsAmount); 
     System.out.println("goodsContent : " + goodsContent); 
     
-    Class.forName("org.mariadb.jdbc.Driver");
+    Connection conn = DBHelper.getConnection();
     String sql = "insert into goods(category, emp_id, goods_title, filename, goods_content, goods_price, goods_amount, update_date, create_date) values(?,?,?,?,?,?,?, now(), now())";
-    Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/shop", "root", "java1234");
     PreparedStatement stmt = conn.prepareStatement(sql);
 	stmt.setString(1,category);
 	stmt.setString(2,empId);
