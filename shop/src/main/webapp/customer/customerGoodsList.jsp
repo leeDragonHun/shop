@@ -11,32 +11,31 @@
 		return;
 	}
     
-    // 카테고리 값 요청
+    // DB연동
+    Connection conn = DBHelper.getConnection();
+    
+    // category 값 요청
 	String category = request.getParameter("category");
+    System.out.println("category : " + category);
     if(category == null){
     	response.sendRedirect("/shop/customer/customerGoodsList.jsp?category=all");
 		return;
     }
     
-    //order 값 요청
+    // order 값 요청
     String order = request.getParameter("order");
     System.out.println("order : " + order);
     
-    // DB연동
-    Connection conn = DBHelper.getConnection();
-    
-    // 검색어 값 요청
+    // searchWord 값 요청
     String searchWord = "";
     if(request.getParameter("searchWord") != null) {
     	searchWord = request.getParameter("searchWord");
     }
     System.out.println("searchWord : " + searchWord);
-    
-    // 카테고리 값 요청
-    System.out.println("category : " + category);
 %>
-<!-- Model Layer -->
+  <!-- Model Layer -->
 <%
+  
     // 카테고리 선택 메뉴
 	PreparedStatement stmt1 = null;
 	ResultSet rs1 = null;
@@ -69,11 +68,11 @@
     System.out.println("rowPerPage : " + rowPerPage);
 	int startRow = ((currentPage-1)*rowPerPage);
     
-    // sql2 정해지는 분기문
+     // sql2 정해지는 분기문
     String sql2 = null;
     String totalRowSql = null;
     
-    // 전체에 관한거
+     // 전체에 관한거
     if((searchWord != null && !searchWord.equals("")) && category.equals("all")){
         System.out.println("검색어가 있고 카테고리가 all");
     	sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where goods_title like '%"+searchWord+ "%'";
@@ -126,17 +125,17 @@
 		sql2 += " limit ?, ?";
         totalRowSql = "select count(*) from goods";
     }
-    
+
     System.out.println("sql2 : " + sql2);
     System.out.println("totalRowSql : " + totalRowSql);
-    
+
 	PreparedStatement stmt2 = null;
     stmt2 = conn.prepareStatement(sql2);
 	stmt2.setInt(1,startRow);
 	stmt2.setInt(2,rowPerPage);
     ResultSet rs2 = null;
     rs2 = stmt2.executeQuery();
-        
+
     // totalRow 를 구하는 SQL 및 dB연동-----------------------------------------------------------
    PreparedStatement totalRowStmt = null;
    ResultSet totalRowRs = null;
@@ -168,14 +167,11 @@
 		m2.put("goodsAmount", rs2.getInt("goodsAmount"));
 		goodsList.add(m2);
 	}
-	System.out.println("goodsList : " + goodsList);
+	System.out.println("goodsList : " + goodsList); 
 
 	// 전체의 '갯수' 나타내기
-    String sql4 = "SELECT COUNT(*) cnt FROM goods";
-	PreparedStatement stmt4 = null;
-    ResultSet rs4 = null;
-    stmt4 = conn.prepareStatement(sql4);
-    rs4 = stmt4.executeQuery();
+    ResultSet count = EmpDAO.allCnt();
+    System.out.println("allCount : " + count);
 %>
 <!-- View Layer -->
 <!DOCTYPE html>
@@ -190,14 +186,10 @@
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div>
 		<a href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">
-            전체
-            <%
-                while(rs4.next()){
-            %>
-                    (<%=rs4.getInt("cnt") %>)
-            <%
-                }
-            %>
+<%--             전체(<%=count %>) --%>
+            전체 <% while(count.next()){  %> 
+                (<%=count.getInt("cnt") %>)
+            <%} %>
         </a>
         
 		<%

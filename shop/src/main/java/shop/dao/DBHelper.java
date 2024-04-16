@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-public class DBHelper {
+public class DBHelper {//DB연동해주는 DAO
 	public static Connection getConnection() throws Exception {
 		Class.forName("org.mariadb.jdbc.Driver");
 		

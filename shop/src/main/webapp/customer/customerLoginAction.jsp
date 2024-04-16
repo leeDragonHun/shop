@@ -40,7 +40,7 @@
 		System.out.println("로그인 한 id : " + (String)(m.get("cusId"))); // 로그인 된 Id
 		System.out.println("로그인 한 pw : " + (String)(m.get("cusPw"))); // 로그인 된 Name
         
-		response.sendRedirect("/shop/customer/customerGoodsList.jsp");
+		response.sendRedirect("/shop/customer/customerGoodsList2.jsp");
     }else{
         System.out.println("로그인 실패");
         String errMsg = URLEncoder.encode("로그인 실패. 아이디와 비밀번호를 확인하세요.", "UTF-8");

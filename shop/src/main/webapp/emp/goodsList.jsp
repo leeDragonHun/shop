@@ -171,11 +171,8 @@
 	System.out.println("goodsList : " + goodsList);
 
 	// 전체의 '갯수' 나타내기
-    String sql4 = "SELECT COUNT(*) cnt FROM goods";
-	PreparedStatement stmt4 = null;
-    ResultSet rs4 = null;
-    stmt4 = conn.prepareStatement(sql4);
-    rs4 = stmt4.executeQuery();
+    ResultSet count = EmpDAO.allCnt();
+    System.out.println("allCount : " + count);
 %>
 <!-- View Layer -->
 <!DOCTYPE html>
@@ -195,14 +192,9 @@
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div>
 		<a href="/shop/emp/goodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">
-            전체
-            <%
-                while(rs4.next()){
-            %>
-                    (<%=rs4.getInt("cnt") %>)
-            <%
-                }
-            %>
+            전체 <% while(count.next()){  %> 
+                (<%=count.getInt("cnt") %>)
+            <%} %>
         </a>
         
 		<%
