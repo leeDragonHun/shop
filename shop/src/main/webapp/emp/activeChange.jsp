@@ -20,17 +20,14 @@
 	} else {
 		active = "ON";
 	}
-	
-	String sql = null;
-	sql = "update emp set active = ? where emp_id = ?";
+	int row = EmpDAO.change(active, empId);
+/* 	String sql = "update emp set active = ? where emp_id = ?";
 	Connection conn = DBHelper.getConnection();
-	PreparedStatement stmt = null;
-	stmt = conn.prepareStatement(sql);
+	PreparedStatement stmt = conn.prepareStatement(sql);
 	stmt.setString(1, active);
 	stmt.setString(2, empId);
 	System.out.println("stmt : " + stmt);
-	int row = 0;
-	row = stmt.executeUpdate();
+	row = stmt.executeUpdate(); */
 	
 	if(row == 1){
 		//변경 성공
@@ -41,6 +38,4 @@
 	}
 	
 	response.sendRedirect("/shop/emp/empList.jsp");
-    
-    conn.close();
 %>

@@ -22,7 +22,8 @@
     System.out.println("birth : " + birth);
     System.out.println("gender : " + gender);
     
-    Connection conn = DBHelper.getConnection();
+    int row = CustomerDAO.insertCustomer(id, pw, name, birth, gender);
+/*     Connection conn = DBHelper.getConnection();
     String sql = "INSERT INTO customer(cus_id, cus_pw, cus_name, birth, gender, update_date, create_date) VALUES(?, password(?), ?, ?, ?, NOW(), NOW())";
     PreparedStatement stmt = conn.prepareStatement(sql);
     
@@ -33,7 +34,7 @@
     stmt.setString(5,gender);
     System.out.println("stmt확인 : " + stmt);
     
-    int row = stmt.executeUpdate();
+    int row = stmt.executeUpdate(); */
     
     if(row >= 1){
         System.out.println("회원가입 완료");
@@ -43,5 +44,4 @@
         response.sendRedirect("/shop/customer/addCustomerForm.jsp");
     }
     
-    conn.close();
 %>

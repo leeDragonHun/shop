@@ -31,19 +31,12 @@
     
     int rowPerPage = 10;
     int startRow = (currentPage-1)*rowPerPage;
+
+    // totalRow 구하는 매서드
+    int totalRow = EmpDAO.totalRow();
     
-     // totalRow 를 구하는 SQL 및 dB연동 
-    String totalRowSql = "select count(*) from emp";
-    PreparedStatement totalRowStmt = null;
-    ResultSet totalRowRs = null;
-    totalRowStmt = conn.prepareStatement(totalRowSql);
-    totalRowRs = totalRowStmt.executeQuery();
-    // 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
-   	int totalRow = 0;
-	if(totalRowRs.next()) {
-		totalRow = totalRowRs.getInt("count(*)");
-	}
-	System.out.println(totalRow + " <-- totalRow");
+    
+    
     // 마지막 페이지는 전체줄수/한페이지에올줄수 예를들어 51페이지면 10으로 나누면 5가된다. 근데 한페이지에 10개씩 오려면 6페이지가 필요하니까 더하기 1을해준다. 그게 lastpage다
 	int lastPage = totalRow / rowPerPage;
 	if(totalRow%rowPerPage != 0) {
@@ -51,43 +44,9 @@
 	}
 	System.out.println(lastPage + " <-- lastPage");
     
-    // 직원 목록 조회
-	PreparedStatement stmt = null;
-	ResultSet rs = null;
-	String sql = "SELECT emp_id empId, grade, emp_name empName, emp_job empJob, hire_date hireDate, active FROM emp order by emp_id asc limit ?, ?";
-    stmt = conn.prepareStatement(sql);
-	stmt.setInt(1, startRow); // (현재페이지 -1)에서 곱하기 rowperPage를 해주면 n번째 페이지의 첫째로 오는 게시글의 순번 즉, 몇번째글인지 계산할 수 있다.
-	stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
-    rs = stmt.executeQuery();
+    // 직원목록조회
+    ArrayList<HashMap<String,Object>> list = EmpDAO.list(startRow, rowPerPage);
     
-    // 특수한 형태의 자료구조(RDBMS:mariadb)를 여태껏 사용하였음
-    // -> API사용(JDBC API) 하여 자료구조(ResultSet) 취득하였었음
-    // -> 이제는 일반화된 자료구조(ArrayList<HashMap>)로 변경할것임 -> 이렇게 모델을 취득
-    // ----JDBC API 종속된 자료구조 모델 ResultSet -> 기본 API 자료구조(ArrayList) 로변경
-    ArrayList<HashMap<String, Object>> list
-     = new ArrayList<HashMap<String, Object>>();
-    
-    // ResultSet -> ArrayList<HashMap<String, Object>>
-    while(rs.next()){
-    	HashMap<String, Object> m = new HashMap<String, Object>();
-        m.put("empId", rs.getString("empId"));
-        m.put("grade", rs.getString("grade"));
-        m.put("empName", rs.getString("empName"));
-        m.put("empJob", rs.getString("empJob"));
-        m.put("hireDate", rs.getString("hireDate"));
-        m.put("active", rs.getString("active"));
-        list.add(m);
-    }
-    // JDBC API 사용이 끝났다면 DB자원들을 해지-----
-    
-    // 직원 ID로 해당 직원의 emp_job 조회
-	PreparedStatement stmt2 = null;
-	ResultSet rs2 = null;
-	String sql2 = "SELECT emp_job empJob FROM emp where emp_id =?";
-    stmt2 = conn.prepareStatement(sql2);
-	stmt2.setString(1,loginId);
-	rs2 = stmt2.executeQuery();
-    System.out.println("stmt2 : " + stmt2);
 %>
 <!-- View Layer : 모델(ArrayList<HashMap<String, Object>>) 출력-->
 <!DOCTYPE html>

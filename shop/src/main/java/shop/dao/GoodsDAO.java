@@ -35,7 +35,9 @@ public class GoodsDAO {
 	//GoodsDAO.goodsList("","");
 	
 	public static int goodsListCnt(String category, String searchWord) throws Exception{
-
+		System.out.println("카테고리:" + category);
+		System.out.println("검색조건:" + searchWord);
+		
 		Connection conn = DBHelper.getConnection();
 		String sql = "select count(*) as cnt"
 				+ " from goods"
@@ -43,25 +45,20 @@ public class GoodsDAO {
 		if(category!=null && !category.equals("") && !(category.equals("all"))) {
 			sql += " and category ='"+category+"'";
 		}
-		
-		if(searchWord != null && searchWord.equals("")) {
+		if(searchWord != null && !searchWord.equals("")) {
 			sql += " and goods_title like '%"+searchWord+"%'";
 		}		
-		
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		
 		ResultSet rs = stmt.executeQuery();
-		
 		rs.next();
-		
+		conn.close();
 		return rs.getInt("cnt");
 	}
 	
 	
 	
 	public static  ArrayList<HashMap<String, Object>> selectGoodsList(String category, String searchWord, String order, int startRow, int rowPerPage ) throws Exception {
-		System.out.println("카테고리:" + category);
-		System.out.println("검색조건:" + searchWord);
+
 		Connection conn = DBHelper.getConnection();
 		String sql = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount"
 				+ " from goods"
@@ -69,11 +66,9 @@ public class GoodsDAO {
 		if(category!=null && !category.equals("") && !(category.equals("all"))) {
 			sql += " and category ='"+category+"'";
 		}
-		
 		if(searchWord != null && !searchWord.equals("")) {
 			sql += " and goods_title like '%"+searchWord+"%'";
 		}
-		
 		if(order != null && !order.equals("") && !order.equals("null")) {
 			sql += " order by";
 			if(order.equals("new")) {
@@ -101,7 +96,26 @@ public class GoodsDAO {
 			m.put("goodsAmount", rs.getInt("goodsAmount"));
 			goodsList.add(m);
 		}
-		
+		conn.close();
 		return goodsList;
 	}
+	
+	public static  ArrayList<HashMap<String, Object>> selectCategory() throws Exception {
+		Connection conn = DBHelper.getConnection();
+		String sql1 = "select category, count(*) cnt from goods group by category order by create_date asc";
+		PreparedStatement stmt1 = conn.prepareStatement(sql1);
+		ResultSet rs1 = stmt1.executeQuery();
+		ArrayList<HashMap<String, Object>> categoryList =
+				new ArrayList<HashMap<String, Object>>();
+		while(rs1.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("category", rs1.getString("category"));
+			m.put("cnt", rs1.getInt("cnt"));
+			categoryList.add(m);
+		}
+		System.out.println("categoryList : " + categoryList);
+		conn.close();
+		return categoryList;
+	}
+	
 }

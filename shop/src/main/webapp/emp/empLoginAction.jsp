@@ -40,5 +40,4 @@
         System.out.println("로그인 실패");
         response.sendRedirect("/shop/emp/empLoginForm.jsp");
     }
-    // 자원반납
 %>

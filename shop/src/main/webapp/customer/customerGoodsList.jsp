@@ -32,146 +32,50 @@
     	searchWord = request.getParameter("searchWord");
     }
     System.out.println("searchWord : " + searchWord);
-%>
-  <!-- Model Layer -->
-<%
-  
-    // 카테고리 선택 메뉴
-	PreparedStatement stmt1 = null;
-	ResultSet rs1 = null;
-	String sql1 = "select category, count(*) cnt from goods group by category order by create_date asc";
-	stmt1 = conn.prepareStatement(sql1);
-	rs1 = stmt1.executeQuery();
-	ArrayList<HashMap<String, Object>> categoryList =
-			new ArrayList<HashMap<String, Object>>();
-	while(rs1.next()) {
-		HashMap<String, Object> m = new HashMap<String, Object>();
-		m.put("category", rs1.getString("category"));
-		m.put("cnt", rs1.getInt("cnt"));
-		categoryList.add(m);
-	}
-	System.out.println("categoryList : " + categoryList);
     
     // 현재페이지 설정. 페이지 값 받아오기
     int currentPage = 1;
     if (request.getParameter("currentPage") != null) {
         currentPage = Integer.parseInt(request.getParameter("currentPage"));
     }
-    
-	// 페이징------------
+%>
+  <!-- Model Layer -->
+<%
+    // 전체의 '갯수' 나타내기
+    int allCnt = GoodsDAO.goodsListCnt("", "");
+    System.out.println("allCount : " + allCnt);  
+
+    // 카테고리 선택 메뉴
+    ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
+        
+	// 페이징-------------------------------------------------------------------------------------
     int rowPerPage = 4;
     if(request.getParameter("rowPerPage") != null) {
 		rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 	}
-	
-    // 전체 아이템 수
     System.out.println("rowPerPage : " + rowPerPage);
 	int startRow = ((currentPage-1)*rowPerPage);
     
-     // sql2 정해지는 분기문
-    String sql2 = null;
-    String totalRowSql = null;
-    
-     // 전체에 관한거
-    if((searchWord != null && !searchWord.equals("")) && category.equals("all")){
-        System.out.println("검색어가 있고 카테고리가 all");
-    	sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where goods_title like '%"+searchWord+ "%'";
-        if(order != null && order.equals("new")){
-            sql2 += " order by create_date desc";
-        }else if(order != null && order.equals("high")){
-            sql2 += " order by goods_price desc";
-        }else if(order != null && order.equals("low")){
-            sql2 += " order by goods_price asc";
-        }
-        sql2 += " limit ?, ?"; 
-    	totalRowSql = "select count(*) from goods where goods_title like '%"+searchWord+ "%'";
-	}else if((searchWord == null || searchWord.equals("")) && category.equals("all")){
-		System.out.println("검색어가 없고 카테고리가 all");
-		sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods";
-        if(order != null && order.equals("new")){
-            sql2 += " order by create_date desc";
-        }else if(order != null && order.equals("high")){
-            sql2 += " order by goods_price desc";
-        }else if(order != null && order.equals("low")){
-            sql2 += " order by goods_price asc";
-        }
-		sql2 += " limit ?, ?";
-        totalRowSql = "select count(*) from goods";
-    }
-    
-    // 카테고리 값 있을 때(all 아니고 다른 값 있을 때)
-    if((searchWord != null && !searchWord.equals("")) && !category.equals("all")){
-    	System.out.println("검색어가 있고 카테고리가 선택됨");
-    	sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where category = '"+category+"' and goods_title like '%"+searchWord+ "%'";
-        if(order != null && order.equals("new")){
-            sql2 += " order by create_date desc";
-        }else if(order != null && order.equals("high")){
-            sql2 += " order by goods_price desc";
-        }else if(order != null && order.equals("low")){
-            sql2 += " order by goods_price asc";
-        }
-    	sql2 += " limit ?, ?";
-    	totalRowSql = "select count(*) from goods where category = '" + category + "' and goods_title like '%"+searchWord+ "%'";
-	}else if((searchWord == null || searchWord.equals(""))&& !category.equals("all")){
-		System.out.println("검색어가 없고 카테고리가 선택됨");
-		sql2 = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount from goods where category = '"+category+"' and goods_title like '%"+searchWord+ "%'";
-        if(order != null && order.equals("new")){
-            sql2 += " order by create_date desc";
-        }else if(order != null && order.equals("high")){
-            sql2 += " order by goods_price desc";
-        }else if(order != null && order.equals("low")){
-            sql2 += " order by goods_price asc";
-        }
-		sql2 += " limit ?, ?";
-        totalRowSql = "select count(*) from goods";
-    }
+	// 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
+  	int totalRow = GoodsDAO.goodsListCnt(category, searchWord);
 
-    System.out.println("sql2 : " + sql2);
-    System.out.println("totalRowSql : " + totalRowSql);
-
-	PreparedStatement stmt2 = null;
-    stmt2 = conn.prepareStatement(sql2);
-	stmt2.setInt(1,startRow);
-	stmt2.setInt(2,rowPerPage);
-    ResultSet rs2 = null;
-    rs2 = stmt2.executeQuery();
-
-    // totalRow 를 구하는 SQL 및 dB연동-----------------------------------------------------------
-   PreparedStatement totalRowStmt = null;
-   ResultSet totalRowRs = null;
-   totalRowStmt = conn.prepareStatement(totalRowSql);
-   totalRowRs = totalRowStmt.executeQuery();
-   
-   // 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
-  	int totalRow = 0;
-	if(totalRowRs.next()) {
-		totalRow = totalRowRs.getInt("count(*)");
-	}
 	System.out.println("totalRow : " + totalRow);
     
-   // 마지막 페이지는 전체줄수/한페이지에올줄수 예를들어 51페이지면 10으로 나누면 5가된다. 근데 한페이지에 10개씩 오려면 6페이지가 필요하니까 더하기 1을해준다. 그게 lastpage다
+    // 마지막 페이지는 전체줄수/한페이지에올줄수 예를들어 51페이지면 10으로 나누면 5가된다. 근데 한페이지에 10개씩 오려면 6페이지가 필요하니까 더하기 1을해준다. 그게 lastpage다
 	int lastPage = totalRow / rowPerPage;
 	if(totalRow%rowPerPage != 0) {
 		lastPage = lastPage + 1;
 	}
 	System.out.println("lastPage : " + lastPage);
-    //---------------------------------------------------------------------------------------------
-    
-    // 굿즈리스트 값입력
-    ArrayList<HashMap<String, Object>> goodsList = new ArrayList<HashMap<String, Object>>();
-	while(rs2.next()) {
-		HashMap<String, Object> m2 = new HashMap<String, Object>();
-		m2.put("goodsTitle", rs2.getString("goodsTitle"));
-		m2.put("filename", rs2.getString("filename"));
-		m2.put("goodsPrice", rs2.getInt("goodsPrice"));
-		m2.put("goodsAmount", rs2.getInt("goodsAmount"));
-		goodsList.add(m2);
-	}
-	System.out.println("goodsList : " + goodsList); 
+	// ---------------------------------------------------------------------------------------------
 
-	// 전체의 '갯수' 나타내기
-    ResultSet count = EmpDAO.allCnt();
-    System.out.println("allCount : " + count);
+
+    // 조건에 맞는 굿즈리스트
+    ArrayList<HashMap<String, Object>> goodsList = GoodsDAO.selectGoodsList(category, searchWord, order, startRow, rowPerPage);
+	
+	System.out.println("goodsList : " + goodsList); 
+ 
+
 %>
 <!-- View Layer -->
 <!DOCTYPE html>
@@ -186,10 +90,9 @@
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div>
 		<a href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">
-<%--             전체(<%=count %>) --%>
-            전체 <% while(count.next()){  %> 
-                (<%=count.getInt("cnt") %>)
-            <%} %>
+
+            전체 (<%=allCnt %>)
+            
         </a>
         
 		<%
@@ -197,7 +100,7 @@
 		%>
 				<a href="/shop/customer/customerGoodsList.jsp?category=<%=(String)(m.get("category"))%>&rowPerPage=<%=rowPerPage%>">
 					<%=(String)(m.get("category"))%>  (<%=(Integer)(m.get("cnt"))%>)
-				</a>	
+				</a>
 		<%		
 			}
 		%>
@@ -216,21 +119,21 @@
            </form>
         </div>
         <%
-                for(HashMap<String, Object> m2 : goodsList){
+                for(HashMap<String, Object> m : goodsList){
         %>
                 	<div style="width:20%; float:left">
                         <table border="1" width="90%" height="90%">
                             <tr>
                                 <td colspan="2">
-                                    <img alt="상품사진" src="/shop/upload/<%=(String)(m2.get("filename")) %>" style="width:100%; height:100%;">
+                                    <img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;">
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><%=(String) (m2.get("goodsTitle"))%></td>
+                                <td colspan="2"><%=(String) (m.get("goodsTitle"))%></td>
                             </tr>
                             <tr>
-                                <td><%=(Integer) (m2.get("goodsPrice"))%></td>
-                                <td><%=(Integer) (m2.get("goodsAmount"))%></td>
+                                <td><%=(Integer) (m.get("goodsPrice"))%></td>
+                                <td><%=(Integer) (m.get("goodsAmount"))%></td>
                             </tr>
                         </table>
                     </div>
@@ -320,7 +223,7 @@
             <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
             %>
-                        <a href="/shop/customer/customerGoodsList.jspsearchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                        <a href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
                         <a href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
                         <a href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
                         <a href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>

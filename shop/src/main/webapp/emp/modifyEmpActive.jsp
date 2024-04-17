@@ -13,19 +13,25 @@
     
     // 로그인 권한 부여할 직원 ID 받고 디버깅
     String requestEmp = null;
+    if(requestEmp == null){ 
+        response.sendRedirect("/shop/emp/empLoginForm.jsp"); 
+        return; // 종료
+    }
     requestEmp = request.getParameter("requestEmp");
     System.out.println("requestEmp : " + requestEmp);
     
     // DB연동 및 쿼리문 추가
-    Connection conn = DBHelper.getConnection();
+    /*     Connection conn = DBHelper.getConnection();
 	PreparedStatement stmt = null;
 	String sql = "UPDATE emp SET ACTIVE='ON' WHERE emp_id = ? ";
     stmt = conn.prepareStatement(sql);
     stmt.setString(1,requestEmp);
     System.out.println("stmt : " + stmt);
-    
-    // 완료시 다시 리스트로
     int row = stmt.executeUpdate();
+     */
+     int row = EmpDAO.offOn(requestEmp);
+     
+    // 완료시 다시 리스트로
     if(row == 1) {
         System.out.println("권한 부여 성공");
         // 받았던 loginId도 같이 보내기
@@ -34,5 +40,5 @@
         System.out.println("권한 부여 실패");      
     }
     // 자원반납
-    conn.close();
+    
 %>
