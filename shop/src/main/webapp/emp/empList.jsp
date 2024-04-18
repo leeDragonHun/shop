@@ -78,24 +78,24 @@
             
             for(HashMap<String, Object> m : list){
         %>
-        <tr>
-            <td><%=(String) (m.get("empId"))%></td>
-            <td><%=(String) (m.get("grade"))%></td>
-            <td><%=(String) (m.get("empName"))%></td>
-            <td><%=(String) (m.get("empJob"))%></td>
-            <td><%=(String) (m.get("hireDate"))%></td>
-            <td>
-                <%=(String) (m.get("active"))%>
-                <%
-                     HashMap<String, Object> sm = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
-                     if((Integer)(sm.get("grade")) > 0) {
-                %>
-                <a href="/shop/emp/activeChange.jsp?empId=<%=(String)(m.get("empId")) %>&active=<%=(String)(m.get("active"))%>">변경</a>
-                <%
-                    }
-                %>
-            </td>
-        </tr>
+            <tr>
+                <td><%=(String) (m.get("empId"))%></td>
+                <td><%=(String) (m.get("grade"))%></td>
+                <td><%=(String) (m.get("empName"))%></td>
+                <td><%=(String) (m.get("empJob"))%></td>
+                <td><%=(String) (m.get("hireDate"))%></td>
+                <td>
+                    <%=(String) (m.get("active"))%>
+                    <%
+                         HashMap<String, Object> sm = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
+                         if((Integer)(sm.get("grade")) > 0) {
+                    %>
+                    <a href="/shop/emp/activeChange.jsp?empId=<%=(String)(m.get("empId")) %>&active=<%=(String)(m.get("active"))%>">변경</a>
+                    <%
+                        }
+                    %>
+                </td>
+            </tr>
         <%
             }
         %>

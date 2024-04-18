@@ -70,7 +70,7 @@ public class EmpDAO {
 	    return rs4;
 		}
 	
-	// totalRow 구하기
+	// emp totalRow 구하기
 	public static int totalRow() throws Exception {
 		int totalRow = 0;
 		Connection conn = DBHelper.getConnection();
@@ -78,6 +78,22 @@ public class EmpDAO {
 	    PreparedStatement totalRowStmt = conn.prepareStatement(totalRowSql);
 	    ResultSet totalRowRs = totalRowStmt.executeQuery();
 	    // 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
+		if(totalRowRs.next()) {
+			totalRow = totalRowRs.getInt("count(*)");
+		}
+		System.out.println(totalRow + " <-- totalRow");
+		conn.close();
+		return totalRow;
+	}
+	
+	// customer totalRow 구하기
+	public static int cusTotalRow() throws Exception {
+		int totalRow = 0;
+		Connection conn = DBHelper.getConnection();
+		String totalRowSql = "select count(*) from customer";
+		PreparedStatement totalRowStmt = conn.prepareStatement(totalRowSql);
+		ResultSet totalRowRs = totalRowStmt.executeQuery();
+		// 전체줄 수(게시글) = 일단 0으로 선언하고. totalRowSql에 count(*)로 몇개인지에 따라 값이 정해짐
 		if(totalRowRs.next()) {
 			totalRow = totalRowRs.getInt("count(*)");
 		}
@@ -97,10 +113,6 @@ public class EmpDAO {
 		stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
 	    rs = stmt.executeQuery();
 	    
-	    // 특수한 형태의 자료구조(RDBMS:mariadb)를 여태껏 사용하였음
-	    // -> API사용(JDBC API) 하여 자료구조(ResultSet) 취득하였었음
-	    // -> 이제는 일반화된 자료구조(ArrayList<HashMap>)로 변경할것임 -> 이렇게 모델을 취득
-	    // ----JDBC API 종속된 자료구조 모델 ResultSet -> 기본 API 자료구조(ArrayList) 로변경
 	    ArrayList<HashMap<String, Object>> list
 	     = new ArrayList<HashMap<String, Object>>();
 	    
@@ -119,6 +131,34 @@ public class EmpDAO {
 		return list;
 	}
 	
+	// 고객 목록 조회
+	public static ArrayList<HashMap<String,Object>> cusList(int startRow, int rowPerPage) throws Exception{
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT cus_id cusId, cus_name cusName, birth, gender FROM customer order by create_date asc limit ?, ?";
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, startRow); // (현재페이지 -1)에서 곱하기 rowperPage를 해주면 n번째 페이지의 첫째로 오는 게시글의 순번 즉, 몇번째글인지 계산할 수 있다.
+		stmt.setInt(2, rowPerPage); // 두번째 물음표에는 '그래서 몇개 보여줄지' 가 정해진다. 말그대로 rowperPage
+		rs = stmt.executeQuery();
+		
+		ArrayList<HashMap<String, Object>> list
+		= new ArrayList<HashMap<String, Object>>();
+		
+		// ResultSet -> ArrayList<HashMap<String, Object>>
+		while(rs.next()){
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("cusId", rs.getString("cusId"));
+			m.put("cusName", rs.getString("cusName"));
+			m.put("birth", rs.getString("birth"));
+			m.put("gender", rs.getString("gender"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// active권한 체인지(on->off, off->on) (a태그용)
 	public static int change(String active, String empId) throws Exception {
 		int row = 0;
 		Connection conn = DBHelper.getConnection();
@@ -132,6 +172,7 @@ public class EmpDAO {
 		return row;
 	}
 	
+	// active권한 off->on (input에 아이디 입력해서 바꾸는 용)
 	public static int offOn(String requestEmp) throws Exception {
 		int row = 0;
 	    Connection conn = DBHelper.getConnection();
@@ -145,6 +186,7 @@ public class EmpDAO {
 	    return row;
 	}
 	
+	// active권한 on->off (input에 아이디 입력해서 바꾸는 용)	
 	public static int onOff(String retireEmp) throws Exception {
 		int row = 0;
 		Connection conn = DBHelper.getConnection();
@@ -158,6 +200,7 @@ public class EmpDAO {
 		return row;
 	}
 	
+	// 카테고리 리스트 출력
 	public static ArrayList<HashMap<String, Object>> categoryList() throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 	    PreparedStatement stmt1 = null;
@@ -174,6 +217,7 @@ public class EmpDAO {
 		return list;
 	}
 	
+	// 카테고리 추가
 	public static int insertCategory(String categoryName) throws Exception {
 		int row = 0;
 		Connection conn = DBHelper.getConnection();
@@ -184,6 +228,7 @@ public class EmpDAO {
 		return row;
 	}
 	
+	// 카테고리 삭제
 	public static int deleteCategory(String categoryName) throws Exception {
 		Connection conn = DBHelper.getConnection();
 		String sql = "DELETE FROM category WHERE category = ?";
@@ -194,6 +239,7 @@ public class EmpDAO {
 		return row;
 	}
 	
+	// 톰캣서버로 올린 파일 삭제
 	public static ResultSet deleteFileName(String categoryName) throws Exception {
 		Connection conn = DBHelper.getConnection();    
 	    String sql2 = "SELECT filename FROM goods WHERE category= ?";

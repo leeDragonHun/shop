@@ -86,6 +86,8 @@
 	<title>상품관리</title>
 </head>
 <body>
+
+    <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
 	
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div>
@@ -125,7 +127,7 @@
                         <table border="1" width="90%" height="90%">
                             <tr>
                                 <td colspan="2">
-                                    <img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;">
+                                    <a href="/shop/customer/goodsOne.jsp?goodsTitle=<%=(String) (m.get("goodsTitle"))%>"><img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;"></a>
                                 </td>
                             </tr>
                             <tr>

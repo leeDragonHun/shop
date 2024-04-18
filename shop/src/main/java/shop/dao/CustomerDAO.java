@@ -42,7 +42,7 @@ public class CustomerDAO {
 		String sql = "insert into customer("
 				+ "cus_id, cus_pw, cus_name, birth, gender,"
 				+ " update_date, create_date) values ("
-				+ "?,PASSWORD('?'),?,?,?,now(),now())";
+				+ "?,PASSWORD(?),?,?,?,now(),now())";
 
 		 PreparedStatement stmt = conn.prepareStatement(sql);
 		 stmt.setString(1, id);

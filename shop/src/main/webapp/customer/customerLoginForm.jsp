@@ -37,5 +37,6 @@
         </table>
         <button type="submit">로그인</button>
     </form>
+    <a href="/shop/customer/addCustomerForm.jsp">회원가입</a>
 </body>
 </html>
