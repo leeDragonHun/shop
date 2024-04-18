@@ -19,37 +19,18 @@
     String categoryName = request.getParameter("categoryName");
     System.out.println("categoryName : " + categoryName);
     
-    // DB연동
-    Connection conn = DBHelper.getConnection();    
-    // 사용할 쿼리문 선언
-    String sql = "DELETE FROM category WHERE category = ?";
-    String sql2 = "SELECT filename FROM goods WHERE category= ?";
-    
-    // ?에 값 넣기
-    PreparedStatement stmt = null;
-    PreparedStatement stmt2 = null;
-    ResultSet rs2 = null; 
-    stmt = conn.prepareStatement(sql);
-    stmt2 = conn.prepareStatement(sql2);
-    stmt.setString(1, categoryName);
-    stmt2.setString(1, categoryName);
-    rs2 = stmt2.executeQuery();
-    
-	// 삭제할 값 디버깅
-	System.out.println("삭제할 카테고리 이름 : " + stmt);
-	System.out.println("삭제할 카테고리 DB의 사진 filename : " + stmt2);    
+    ResultSet dfn = EmpDAO.deleteFileName(categoryName);
     
 	String filePath = request.getServletContext().getRealPath("upload");
-    while(rs2.next()){
-    	rs2.getString("filename"); 
-        File df = new File(filePath, rs2.getString("filename"));
-    	System.out.println(rs2.getString("filename"));
+    while(dfn.next()){
+    	dfn.getString("filename"); 
+        File df = new File(filePath, dfn.getString("filename"));
+    	System.out.println(dfn.getString("filename"));
         df.delete();
     }
-    // 파일 삭제 API
 
-    // 삭제성공여부
-	int row = stmt.executeUpdate();
+    // 삭제 매서드
+	int row = EmpDAO.deleteCategory(categoryName);
 	
 	// 삭제성공하면 -> 
 	if(row == 1){

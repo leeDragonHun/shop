@@ -10,22 +10,8 @@
         response.sendRedirect("/shop/emp/empLoginForm.jsp");
         return;
     }
-    // DB연동
-    Connection conn = DBHelper.getConnection();
-    PreparedStatement stmt1 = null;
-    ResultSet rs1 = null;
     
-    String sql1 = "select category from category";
-    stmt1 = conn.prepareStatement(sql1);
-    rs1 = stmt1.executeQuery();
-    // 선언
-    ArrayList<String> categoryList =
-            new ArrayList<String>();
-    while(rs1.next()) {
-        categoryList.add(rs1.getString("category"));
-    }
-    // 디버깅
-    System.out.println("categoryList : " + categoryList);
+    ArrayList<HashMap<String, Object>> list = EmpDAO.categoryList();
     
     HashMap<String, Object> m = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
     String empId = (String)m.get("empId");
@@ -34,7 +20,6 @@
     
     String errMsg = request.getParameter("errMsg");
 
-   
 %>
 <!DOCTYPE html>
 <html>
@@ -59,12 +44,12 @@
     <form method="post" action="/shop/emp/addGoodsAction.jsp"
         enctype="multipart/form-data">
         <div>
-            카테고리 : 
+            선택사항 : 
             <select name="category">
                 <%
-                    for(String c : categoryList){
+                    for(HashMap c : list){
                 %>
-                        <option value="<%=c%>"><%=c%></option>
+                        <option value="<%=(String)(c.get("category"))%>"><%=c%></option>
                 <%       
                     }
                 %>
@@ -96,5 +81,4 @@
         </div>
         <button type="submit">상품등록</button>
     </form>
-
 </body>

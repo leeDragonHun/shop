@@ -157,6 +157,52 @@ public class EmpDAO {
 		conn.close();
 		return row;
 	}
+	
+	public static ArrayList<HashMap<String, Object>> categoryList() throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+	    PreparedStatement stmt1 = null;
+	    ResultSet rs1 = null;
+	    Connection conn = DBHelper.getConnection();
+	    String sql1 = "select category from category order by create_date asc";
+	    stmt1 = conn.prepareStatement(sql1);
+	    rs1 = stmt1.executeQuery();
+	    while(rs1.next()) {
+	        HashMap<String, Object> m = new HashMap<String, Object>();
+	        m.put("category", rs1.getString("category"));
+	        list.add(m);
+	    }
+		return list;
+	}
+	
+	public static int insertCategory(String categoryName) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "INSERT INTO category(category) VALUES(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, categoryName);
+		row = stmt.executeUpdate();
+		return row;
+	}
+	
+	public static int deleteCategory(String categoryName) throws Exception {
+		Connection conn = DBHelper.getConnection();
+		String sql = "DELETE FROM category WHERE category = ?";
+		PreparedStatement stmt = null;
+		stmt = conn.prepareStatement(sql);
+		stmt.setString(1, categoryName);
+		int row = stmt.executeUpdate();
+		return row;
+	}
+	
+	public static ResultSet deleteFileName(String categoryName) throws Exception {
+		Connection conn = DBHelper.getConnection();    
+	    String sql2 = "SELECT filename FROM goods WHERE category= ?";
+	    PreparedStatement stmt2 = null;
+	    stmt2 = conn.prepareStatement(sql2);
+	    stmt2.setString(1, categoryName);
+	    ResultSet dfn = stmt2.executeQuery();
+		return dfn;
+	}
 }
 
 

@@ -28,11 +28,11 @@
             %>
             <tr>
                 <td>아이디</td>
-                <td><input type="text" name="cusId"></td>
+                <td><input type="text" name="cusId" value="lyh"></td>
             </tr>
             <tr>
                 <td>비밀번호</td>
-                <td><input type="password" name="cusPw"></td>
+                <td><input type="password" name="cusPw" value="1234"></td>
             </tr>
         </table>
         <button type="submit">로그인</button>

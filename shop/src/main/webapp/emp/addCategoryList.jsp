@@ -16,23 +16,8 @@
     String categoryName = request.getParameter("categoryName");
     System.out.println("categoryName : " + categoryName);
     
-    // DB연동
-    Connection conn = DBHelper.getConnection();
-
-    // 사용할 쿼리문 선언
-    String sql = "INSERT INTO category(category) VALUES(?)";
+    int row = EmpDAO.insertCategory(categoryName);
     
-    // ?에 값 넣기
-    PreparedStatement stmt = null;
-    stmt = conn.prepareStatement(sql);
-    stmt.setString(1, categoryName);
-    
-	// 추가할 값 디버깅
-	System.out.println("추가할 카테고리 이름 : " + stmt);
-    
-	// 추가성공여부
-	int row = stmt.executeUpdate();
-	
 	// 추가성공하면 -> 
 	if(row == 1){
 		System.out.println("카테고리 추가 완료 : " + row);

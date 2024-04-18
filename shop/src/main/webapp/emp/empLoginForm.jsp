@@ -16,10 +16,10 @@
 	<title>로그인화면</title>
 </head>
 <body>
-    <h1>로그인</h1>
+    <h1>직원 로그인</h1>
     <form action="/shop/emp/empLoginAction.jsp" method="post">
-        empId : <input type="text" name="empId">
-        empPw : <input type="password" name="empPw">
+        empId : <input type="text" name="empId" value="admin">
+        empPw : <input type="password" name="empPw" value="1234">
         <button type="submit">로그인</button>
     </form>
 </body>

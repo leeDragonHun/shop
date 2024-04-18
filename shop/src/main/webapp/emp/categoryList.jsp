@@ -17,19 +17,7 @@
 <!-- Model Layer -->
 <%
     // 카테고리 선택 메뉴
-    PreparedStatement stmt1 = null;
-    ResultSet rs1 = null;
-    String sql1 = "select category from category order by create_date asc";
-    stmt1 = conn.prepareStatement(sql1);
-    rs1 = stmt1.executeQuery();
-    ArrayList<HashMap<String, Object>> categoryList =
-            new ArrayList<HashMap<String, Object>>();
-    while(rs1.next()) {
-        HashMap<String, Object> m = new HashMap<String, Object>();
-        m.put("category", rs1.getString("category"));
-        categoryList.add(m);
-    }
-    System.out.println("categoryList : " + categoryList);
+    ArrayList<HashMap<String, Object>> list = EmpDAO.categoryList();
     
 %>
 <!DOCTYPE html>
@@ -49,7 +37,7 @@
     <!-- 서브메뉴 카테고리별 상품리스트 -->
     <div>
         <%
-            for(HashMap m : categoryList) {
+            for(HashMap m : list) {
         %>
                 <a href="/shop/emp/goodsList.jsp?category=<%=(String)(m.get("category"))%>">
                     <%=(String)(m.get("category"))%>

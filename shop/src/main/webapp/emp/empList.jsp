@@ -16,6 +16,7 @@
     // 로그인 사용자 ID가 get방식으로 들어옴
     String loginId = null;
     loginId = request.getParameter("loginId");
+    
     System.out.println("loginId : " + loginId);
 
     // DB 연동
