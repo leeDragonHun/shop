@@ -57,10 +57,10 @@ public class GoodsDAO {
 	
 	
 	
-	public static  ArrayList<HashMap<String, Object>> selectGoodsList(String category, String searchWord, String order, int startRow, int rowPerPage ) throws Exception {
+	public static ArrayList<HashMap<String, Object>> selectGoodsList(String category, String searchWord, String order, int startRow, int rowPerPage ) throws Exception {
 
 		Connection conn = DBHelper.getConnection();
-		String sql = "select goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount"
+		String sql = "select goods_no goodsNo, goods_title goodsTitle, filename, goods_price goodsPrice, goods_amount goodsAmount"
 				+ " from goods"
 				+ " where 1=1";
 		if(category!=null && !category.equals("") && !(category.equals("all"))) {
@@ -90,6 +90,7 @@ public class GoodsDAO {
 		ArrayList<HashMap<String, Object>> goodsList = new ArrayList<HashMap<String, Object>>();
 		while(rs.next()) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("goodsNo", rs.getString("goodsNo"));
 			m.put("goodsTitle", rs.getString("goodsTitle"));
 			m.put("filename", rs.getString("filename"));
 			m.put("goodsPrice", rs.getInt("goodsPrice"));
@@ -118,4 +119,64 @@ public class GoodsDAO {
 		return categoryList;
 	}
 	
+	public static ArrayList<HashMap<String, Object>> showGoodsOne(int goodsNo) throws Exception { 
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT goods_no goodsNo, category, goods_title goodsTitle, filename, goods_content goodsContent, goods_price GoodsPrice, goods_amount goodsAmount"
+				+ " FROM goods"
+				+ " WHERE goods_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goodsNo);
+		ResultSet rs = stmt.executeQuery();
+		
+		ArrayList<HashMap<String, Object>> goodsOne = new ArrayList<HashMap<String, Object>>();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("goodsNo", rs.getInt("goodsNo"));
+			m.put("category", rs.getString("category"));
+			m.put("goodsTitle", rs.getString("goodsTitle"));
+			m.put("filename", rs.getString("filename"));
+			m.put("goodsContent", rs.getString("goodsContent"));
+			m.put("goodsPrice", rs.getInt("goodsPrice"));
+			m.put("goodsAmount", rs.getInt("goodsAmount"));
+			goodsOne.add(m);
+		}
+		return goodsOne;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -49,7 +49,7 @@
     ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
         
 	// 페이징-------------------------------------------------------------------------------------
-    int rowPerPage = 4;
+    int rowPerPage = 5;
     if(request.getParameter("rowPerPage") != null) {
 		rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 	}
@@ -86,7 +86,7 @@
 	<title>상품관리</title>
 </head>
 <body>
-
+    <!-- 고객메뉴  -->
     <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
 	
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
@@ -127,7 +127,9 @@
                         <table border="1" width="90%" height="90%">
                             <tr>
                                 <td colspan="2">
-                                    <a href="/shop/customer/goodsOne.jsp?goodsTitle=<%=(String) (m.get("goodsTitle"))%>"><img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;"></a>
+                                    <a href="/shop/customer/goodsOne.jsp?goodsNo=<%=(String)(m.get("goodsNo"))%>">
+                                        <img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;">
+                                    </a>
                                 </td>
                             </tr>
                             <tr>
