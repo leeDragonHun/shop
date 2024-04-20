@@ -34,6 +34,7 @@ public class GoodsDAO {
 	}*/
 	//GoodsDAO.goodsList("","");
 	
+	// 카테고리별 상품 갯수 메서드
 	public static int goodsListCnt(String category, String searchWord) throws Exception{
 		System.out.println("카테고리:" + category);
 		System.out.println("검색조건:" + searchWord);
@@ -56,7 +57,7 @@ public class GoodsDAO {
 	}
 	
 	
-	
+	// 상품목록 보여주는 메서드(검색조건, 카테고리조건, 보여주기 순서, 페이징기능)
 	public static ArrayList<HashMap<String, Object>> selectGoodsList(String category, String searchWord, String order, int startRow, int rowPerPage ) throws Exception {
 
 		Connection conn = DBHelper.getConnection();
@@ -101,6 +102,7 @@ public class GoodsDAO {
 		return goodsList;
 	}
 	
+	// 카테고리 보여주는 메서드
 	public static  ArrayList<HashMap<String, Object>> selectCategory() throws Exception {
 		Connection conn = DBHelper.getConnection();
 		String sql1 = "select category, count(*) cnt from goods group by category order by create_date asc";
@@ -119,6 +121,7 @@ public class GoodsDAO {
 		return categoryList;
 	}
 	
+	// 상품 상세보기 메서드
 	public static ArrayList<HashMap<String, Object>> showGoodsOne(int goodsNo) throws Exception { 
 		Connection conn = DBHelper.getConnection();
 		String sql = "SELECT goods_no goodsNo, category, goods_title goodsTitle, filename, goods_content goodsContent, goods_price GoodsPrice, goods_amount goodsAmount"
@@ -140,7 +143,40 @@ public class GoodsDAO {
 			m.put("goodsAmount", rs.getInt("goodsAmount"));
 			goodsOne.add(m);
 		}
+		conn.close();
 		return goodsOne;
+	}
+	
+	// 주문 메서드
+	public static int goodsOrder(String cusId, int goodsNo, int ea) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "INSERT INTO orders(cus_id, goods_no, ea)"
+				+ " VALUES(?,?,?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, cusId);
+		stmt.setInt(2, goodsNo);
+		stmt.setInt(3, ea);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		
+		conn.close();
+		return row;
+	}
+	
+	// 재고 처리( 주문량1 이면 재고량-1)
+	public static int AmountMinusEa(int AmountMinus, int goodsNo) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE goods SET goods_amount=? WHERE goods_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, AmountMinus);
+		stmt.setInt(2, goodsNo);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		
+		conn.close();
+		return row;
 	}
 	
 }

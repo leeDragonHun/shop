@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.net.*"%>
 <%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====goodsOne.jsp===========================================");
     
     // 로그인 인증 분기
     if(session.getAttribute("loginCus") == null){
-        response.sendRedirect("/shop/customer/customerLoginForm.jsp");
+    	String errMsg =  URLEncoder.encode("아이디와 비밀번호가 잘못되었습니다","utf-8");
+        response.sendRedirect("/shop/customer/customerLoginForm.jsp?&errMsg="+errMsg);
         return;
     }
     
@@ -15,7 +17,6 @@
     System.out.println("goodsNo : " + goodsNo);
     
     // GoodsDAO에서 goods의 DB 가져오기(where = goodsNo) 인것.
-    
     ArrayList<HashMap<String, Object>> showGoods = GoodsDAO.showGoodsOne(goodsNo);
     System.out.println("showGoods : " + showGoods);
 %>
@@ -59,10 +60,32 @@
             }
         %>
     </table>
+    <!-- 재고가 있을때만 주문활성화, 재고가 없으면 품절표시 -->
     <form method="post" action="/shop/customer/orderAction.jsp">
         <input type="hidden" name="goodsNo" value="<%=goodsNo %>">
+        <%
+        for(HashMap<String, Object> m : showGoods){
+            if((Integer)(m.get("goodsAmount")) > 0){
+        %>
+        <input type="hidden" name="goodsAmount" value="<%=(Integer) (m.get("goodsAmount")) %>">
+        <select name="ea">
+        <%
+        	for(int ea = 1; ea <= (Integer) (m.get("goodsAmount")); ea++){
+        %>
+                 <option value="<%=ea%>"><%=ea%></option>
+        <%
+        		}
+        %>
+        </select>
         <button type="submit">구매하기</button>
+        <%        
+            }else{
+        %>
+        <button type="submit" disabled="disabled">품절</button>
+        <%        
+            }
+        }
+        %>
     </form>
-
 </body>
 </html>

@@ -11,6 +11,9 @@
 		return;
 	}
     
+    //  에러메시지 호출
+	String errMsg = request.getParameter("errMsg");
+    
     // DB연동
     Connection conn = DBHelper.getConnection();
     
@@ -86,6 +89,15 @@
 	<title>상품관리</title>
 </head>
 <body>
+    <!-- 주문 실패시 에러 메시지 -->
+    <%
+        if(errMsg != null){
+    %>
+            <%=errMsg %>
+    <%
+        }
+    %>
+
     <!-- 고객메뉴  -->
     <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
 	
@@ -137,7 +149,19 @@
                             </tr>
                             <tr>
                                 <td><%=(Integer) (m.get("goodsPrice"))%></td>
-                                <td><%=(Integer) (m.get("goodsAmount"))%></td>
+                                <td>
+                                <%
+                                    if((Integer) (m.get("goodsAmount")) == 0){
+                                %>
+                                    품절
+                                <%
+                                    }else{
+                                %>
+                                        <%=(Integer) (m.get("goodsAmount")) %>
+                                <%
+                                    }
+                                %>
+                                </td>
                             </tr>
                         </table>
                     </div>
