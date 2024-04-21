@@ -148,15 +148,16 @@ public class GoodsDAO {
 	}
 	
 	// 주문 메서드
-	public static int goodsOrder(String cusId, int goodsNo, int ea) throws Exception {
+	public static int goodsOrder(String goodsTitle, String cusId, int goodsNo, int ea) throws Exception {
 		int row = 0;
 		Connection conn = DBHelper.getConnection();
-		String sql = "INSERT INTO orders(cus_id, goods_no, ea)"
-				+ " VALUES(?,?,?)";
+		String sql = "INSERT INTO orders(cus_id, goods_title, goods_no, ea)"
+				+ " VALUES(?,?,?,?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, cusId);
-		stmt.setInt(2, goodsNo);
-		stmt.setInt(3, ea);
+		stmt.setString(2, goodsTitle);
+		stmt.setInt(3, goodsNo);
+		stmt.setInt(4, ea);
 		row = stmt.executeUpdate();
 		System.out.println(stmt);
 		
@@ -179,6 +180,169 @@ public class GoodsDAO {
 		return row;
 	}
 	
+	// 결제완료 -> 배송완료
+	public static int CompleteDelivery(int ordersNo) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE orders SET state = '배송완료' WHERE orders_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ordersNo);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		conn.close();
+		return row;
+	}
+	
+	// 배송완료 -> 구매확정
+	public static int CompleteBuy(int ordersNo) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE orders SET state = '구매확정' WHERE orders_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ordersNo);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		conn.close();
+		return row;
+	}
+	
+	// 전체 배송완료 목록 출력
+	public static ArrayList <HashMap<String, Object>> allCompleteDelivery() throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, cus_id, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE state = '배송완료'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("cusId", rs.getString("cus_id"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 전체 결제완료 목록 출력
+	public static ArrayList <HashMap<String, Object>> allCompletePayment() throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, cus_id, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE state = '결제완료'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("cusId", rs.getString("cus_id"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 결제완료 목록 출력
+	public static ArrayList <HashMap<String, Object>> CompletePayment(String cusId) throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE cus_id = ? AND state = '결제완료'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,cusId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 배송완료 목록 출력
+	public static ArrayList <HashMap<String, Object>> CompleteDelivery(String cusId) throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE cus_id = ? AND state = '배송완료'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,cusId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 구매확정 목록 출력
+	public static ArrayList <HashMap<String, Object>> CompleteBuy(String cusId) throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE cus_id = ? AND state = '구매확정'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,cusId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 리뷰완료 목록 출력
+	public static ArrayList <HashMap<String, Object>> CompleteReview(String cusId) throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT orders_no, goods_title, goods_no, ea, state"
+				+ " FROM orders"
+				+ " WHERE cus_id = ? AND state = '리뷰완료'";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,cusId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("ordersNo", rs.getInt("orders_no"));
+			m.put("goodsTitle", rs.getString("goods_title"));
+			m.put("goodsNo", rs.getInt("goods_no"));
+			m.put("ea", rs.getInt("ea"));
+			m.put("state", rs.getString("state"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
 }
 
 

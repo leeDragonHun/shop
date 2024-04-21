@@ -6,7 +6,8 @@
     System.out.println("=====orderAction.jsp==================================");
     // 로그인 인증 분기
     if(session.getAttribute("loginCus") == null) {
-        response.sendRedirect("/shop/customer/customerGoodsList.jsp");
+    	String errMsg =  URLEncoder.encode("로그인을 먼저 해주세요.","utf-8");
+        response.sendRedirect("/shop/customer/customerLoginForm.jsp?&errMsg="+errMsg);
         return;
     }
     
@@ -18,15 +19,17 @@
     System.out.println("cusId : " + cusId);
     
     // 주문한 상품의 번호, 갯수 요청
+    String goodsTitle = request.getParameter("goodsTitle");
     int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
     int goodsAmount = Integer.parseInt(request.getParameter("goodsAmount"));
     int ea = Integer.parseInt(request.getParameter("ea"));
+    System.out.println("상품명 : " + goodsTitle);
     System.out.println("재고 : " + goodsAmount);
     System.out.println("상품번호 : " + goodsNo);
     System.out.println("주문갯수 : " + ea);
     
     // 주문 메서드
-    int order = GoodsDAO.goodsOrder(cusId, goodsNo, ea); 
+    int order = GoodsDAO.goodsOrder(goodsTitle, cusId, goodsNo, ea); 
     
     // 재고 - 주문 갯수 값 구하고 재고 업데이트
     int AmountMinus = goodsAmount-ea;

@@ -2,12 +2,14 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="shop.dao.*" %>
+<%@ page import="java.net.*" %>
 <!-- Controller Layer -->
 <%
     System.out.println("=====customerGoodsList.jsp==========================================");
 	// 인증분기	 : 세션변수 이름 - loginCus
 	if(session.getAttribute("loginCus") == null) {
-		response.sendRedirect("/shop/customer/customerLoginForm.jsp");
+		String errMsg =  URLEncoder.encode("로그인을 먼저 해주세요.","utf-8");
+        response.sendRedirect("/shop/customer/customerLoginForm.jsp?&errMsg="+errMsg);
 		return;
 	}
     

@@ -7,6 +7,9 @@
         response.sendRedirect("/shop/emp/empList.jsp"); 
         return; // 종료
     }
+
+    // 에러메시지 받기.
+    String errMsg = request.getParameter("errMsg");
 %>
 <!DOCTYPE html>
 <html>
@@ -16,6 +19,13 @@
 	<title>로그인화면</title>
 </head>
 <body>
+    <%
+        if(errMsg != null){
+    %>
+            <%=errMsg %>
+    <%
+        }
+    %>
     <h1>직원 로그인</h1>
     <form action="/shop/emp/empLoginAction.jsp" method="post">
         empId : <input type="text" name="empId" value="admin">

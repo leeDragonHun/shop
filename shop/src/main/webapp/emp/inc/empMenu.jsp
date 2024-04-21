@@ -18,5 +18,6 @@
     <span><a href="/shop/emp/customerList.jsp">고객관리</a></span>
 	<span><a href="/shop/emp/categoryList.jsp">카테고리관리</a></span>
 	<span><a href="/shop/emp/goodsList.jsp?category=all">상품관리</a></span>
+	<span><a href="/shop/emp/orderList.jsp">주문내역관리</a></span>
     <span><a href="/shop/emp/logoutAction.jsp">로그아웃</a></span>
 </div>

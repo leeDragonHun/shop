@@ -7,7 +7,7 @@
     
     // 로그인 인증 분기
     if(session.getAttribute("loginCus") == null){
-    	String errMsg =  URLEncoder.encode("아이디와 비밀번호가 잘못되었습니다","utf-8");
+    	String errMsg =  URLEncoder.encode("로그인을 먼저 해주세요.","utf-8");
         response.sendRedirect("/shop/customer/customerLoginForm.jsp?&errMsg="+errMsg);
         return;
     }
@@ -68,6 +68,7 @@
             if((Integer)(m.get("goodsAmount")) > 0){
         %>
         <input type="hidden" name="goodsAmount" value="<%=(Integer) (m.get("goodsAmount")) %>">
+        <input type="hidden" name="goodsTitle" value="<%=(String) (m.get("goodsTitle")) %>">
         <select name="ea">
         <%
         	for(int ea = 1; ea <= (Integer) (m.get("goodsAmount")); ea++){
