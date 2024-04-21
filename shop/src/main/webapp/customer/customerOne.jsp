@@ -14,6 +14,7 @@
     
     // 에러메시지 받기.
     String berrMsg = request.getParameter("berrMsg");
+    String rerrMsg = request.getParameter("rerrMsg");
     
     // 로그인 정보 호출
     HashMap<String,Object> loginCus 
@@ -29,7 +30,7 @@
     // 구매 확정된 orders 데이터 출력
     ArrayList<HashMap<String, Object>> CompleteBuy = GoodsDAO.CompleteBuy(cusId);
     // 리뷰 완료된 orders 데이터 출력
-    ArrayList<HashMap<String, Object>> CompleteReview = GoodsDAO.CompleteReview(cusId);
+    ArrayList<HashMap<String, Object>> myReview = GoodsDAO.myReview(cusId);
 %>
 <!DOCTYPE html>
 <html>
@@ -41,10 +42,19 @@
     <!-- 고객메뉴  -->
     <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
     
+    <!-- 구매확정 실패 에러메시지 -->
     <%
         if(berrMsg != null){
     %>
             <%=berrMsg %>
+    <%
+        }
+    %>
+    <!-- 리뷰작성 실패 에러메시지 -->
+    <%
+        if(rerrMsg != null){
+    %>
+            <%=rerrMsg %>
     <%
         }
     %>
@@ -58,7 +68,7 @@
                 <th>상품이름</th>
                 <th>상품번호</th>
                 <th>주문갯수</th>
-                <th>주문상태</th>
+                <th>상태</th>
             </tr>
         <%
             for(HashMap<String, Object> m : CompletePayment){
@@ -83,7 +93,7 @@
                 <th>상품이름</th>
                 <th>상품번호</th>
                 <th>주문갯수</th>
-                <th>주문상태</th>
+                <th>상태</th>
                 <th>확정하기</th>
             </tr>
         <%
@@ -110,7 +120,7 @@
                 <th>상품이름</th>
                 <th>상품번호</th>
                 <th>주문갯수</th>
-                <th>주문상태</th>
+                <th>상태</th>
                 <th>리뷰작성</th>
             </tr>
         <%
@@ -122,7 +132,7 @@
                 <td><%=m.get("goodsNo") %></td>
                 <td><%=m.get("ea") %></td>
                 <td><%=m.get("state") %></td>
-                <td><a href="/shop/customer/writeReview.jsp?ordersNo=<%=m.get("ordersNo") %>">작성하기</a></td>
+                <td><a href="/shop/customer/writeReview.jsp?ordersNo=<%=m.get("ordersNo") %>&goodsTitle=<%=m.get("goodsTitle") %>">작성하기</a></td>
             </tr>
         <%
             }
@@ -130,24 +140,20 @@
         </table>
     </fieldset>
     <fieldset>
-        <legend>리뷰관리</legend>
+        <legend>내가 쓴 리뷰관리</legend>
                 <table border="1">
             <tr>
-                <th>주문번호</th>
                 <th>상품이름</th>
-                <th>상품번호</th>
-                <th>주문갯수</th>
-                <th>주문상태</th>
+                <th>내용</th>
+                <th>별점</th>
             </tr>
         <%
-            for(HashMap<String, Object> m : CompleteReview){
+            for(HashMap<String, Object> m : myReview){
         %>
             <tr>
-                <td><%=m.get("ordersNo") %></td>
                 <td><%=m.get("goodsTitle") %></td>
-                <td><%=m.get("goodsNo") %></td>
-                <td><%=m.get("ea") %></td>
-                <td><%=m.get("state") %></td>
+                <td><%=m.get("content") %></td>
+                <td><%=m.get("rating") %></td>
             </tr>
         <%
             }

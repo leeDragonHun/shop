@@ -147,6 +147,26 @@ public class GoodsDAO {
 		return goodsOne;
 	}
 	
+	// 리뷰작성 메서드
+	public static int writeReview(int ordersNo, String cusId, String goodsTitle, String content, int rating) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "INSERT INTO review"
+				+ " (orders_no, cus_id, goods_title, content, rating, update_date, create_date)"
+				+ " VALUES(?,?,?,?,?, now(), NOW())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ordersNo);
+		stmt.setString(2, cusId);
+		stmt.setString(3, goodsTitle);
+		stmt.setString(4, content);
+		stmt.setInt(5, rating);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		
+		conn.close();
+		return row;
+	}
+	
 	// 주문 메서드
 	public static int goodsOrder(String goodsTitle, String cusId, int goodsNo, int ea) throws Exception {
 		int row = 0;
@@ -204,6 +224,17 @@ public class GoodsDAO {
 		System.out.println(stmt);
 		conn.close();
 		return row;
+	}
+	
+	// 구매확정 -> 리뷰완료
+	public static void CompleteReview(int ordersNo) throws Exception {
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE orders SET state = '리뷰완료' WHERE orders_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, ordersNo);
+		stmt.executeUpdate();
+		System.out.println(stmt);
+		conn.close();
 	}
 	
 	// 전체 배송완료 목록 출력
@@ -321,23 +352,44 @@ public class GoodsDAO {
 		return list;
 	}
 	
-	// 리뷰완료 목록 출력
-	public static ArrayList <HashMap<String, Object>> CompleteReview(String cusId) throws Exception {
+	// 내가 쓴 리뷰 목록 출력
+	public static ArrayList <HashMap<String, Object>> myReview(String cusId) throws Exception {
 		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
 		Connection conn = DBHelper.getConnection();
-		String sql = "SELECT orders_no, goods_title, goods_no, ea, state"
-				+ " FROM orders"
-				+ " WHERE cus_id = ? AND state = '리뷰완료'";
+		String sql = "SELECT goods_title, content, rating"
+				+ " FROM review"
+				+ " WHERE cus_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1,cusId);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("ordersNo", rs.getInt("orders_no"));
 			m.put("goodsTitle", rs.getString("goods_title"));
-			m.put("goodsNo", rs.getInt("goods_no"));
-			m.put("ea", rs.getInt("ea"));
-			m.put("state", rs.getString("state"));
+			m.put("content", rs.getString("content"));
+			m.put("rating", rs.getInt("rating"));
+			list.add(m);
+		}
+		conn.close();
+		return list;
+	}
+	
+	// 해당 상품의 리뷰 출력
+	public static ArrayList <HashMap<String, Object>> goodsOneReview(int goodsNo) throws Exception {
+		ArrayList <HashMap<String, Object>> list = new ArrayList <HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		String sql = "SELECT review.cus_id, orders.ea, review.content, review.rating"
+				+ " FROM review"
+				+ " INNER JOIN orders ON review.orders_no = orders.orders_no"
+				+ " WHERE orders.goods_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1,goodsNo);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("cusId", rs.getString("review.cus_id"));
+			m.put("ea", rs.getInt("orders.ea"));
+			m.put("content", rs.getString("review.content"));
+			m.put("rating", rs.getInt("review.rating"));
 			list.add(m);
 		}
 		conn.close();

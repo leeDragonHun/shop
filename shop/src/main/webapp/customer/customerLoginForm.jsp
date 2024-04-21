@@ -18,7 +18,7 @@
 <body>
     <form method="post" action="/shop/customer/customerLoginAction.jsp">
         <table>
-            <h3>고객 로그인</h3>
+            <h1>고객 로그인</h1>
             <%
                 if(errMsg != null){
             %>
@@ -37,6 +37,7 @@
         </table>
         <button type="submit">로그인</button>
     </form>
+    <a href="/shop/emp/empLoginForm.jsp">직원 로그인</a>
     <a href="/shop/customer/addCustomerForm.jsp">회원가입</a>
 </body>
 </html>

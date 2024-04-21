@@ -19,6 +19,10 @@
     // GoodsDAO에서 goods의 DB 가져오기(where = goodsNo) 인것.
     ArrayList<HashMap<String, Object>> showGoods = GoodsDAO.showGoodsOne(goodsNo);
     System.out.println("showGoods : " + showGoods);
+    
+    // 해당 상품의 리뷰 목록 메서드
+    ArrayList<HashMap<String, Object>> goodsOneReview = GoodsDAO.goodsOneReview(goodsNo);
+    System.out.println("goodsOneReview : " + goodsOneReview);
 %>
 <!DOCTYPE html>
 <html>
@@ -88,5 +92,54 @@
         }
         %>
     </form>
+    <h1>리뷰</h1>
+    <table border="1">
+        <tr>
+            <th>작성자</th>
+            <th>주문갯수</th>
+            <th>내용</th>
+            <th>별점</th>
+        </tr>
+        <%
+            for(HashMap<String, Object> m : goodsOneReview){
+        %>
+        <tr>
+            <td><%=(String) (m.get("cusId"))%></td>
+            <td><%=(Integer) (m.get("ea"))%></td>
+            <td><%=(String) (m.get("content"))%></td>
+            <td>
+        <%
+            if( (Integer)(m.get("rating")) == 5){
+        %>
+                ★★★★★
+        <%
+            }else if( (Integer)(m.get("rating")) == 4){
+        %>
+                ★★★★☆
+        <%
+            }else if( (Integer)(m.get("rating")) == 3){
+        %>
+                ★★★☆☆
+        <%
+            }else if( (Integer)(m.get("rating")) == 2){
+        %>
+                ★★☆☆☆
+        <%
+            }else if( (Integer)(m.get("rating")) == 1){
+        %>
+                ★☆☆☆☆
+        <%
+            }else if( (Integer)(m.get("rating")) == 0){
+        %>
+                ☆☆☆☆☆
+        <%
+            }
+        %>
+            </td>
+        </tr>
+        <%
+            }
+        %>
+    </table>
 </body>
 </html>

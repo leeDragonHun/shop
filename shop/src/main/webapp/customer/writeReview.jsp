@@ -19,13 +19,11 @@
     String cusId = (String)(loginCus.get("cus_id"));
     System.out.println("현재 로그인 사용자 : " + cusId);
     
-    // 상품 번호 호출
+    // 상품 번호, 이름 호출
     int ordersNo = Integer.parseInt(request.getParameter("ordersNo"));
     System.out.println("상품번호 : " + ordersNo);
-    
-    // 리뷰작성 후 state를 구매확정->리뷰완료로 변경하는 메서드
-    
-    
+    String goodsTitle = request.getParameter("goodsTitle");
+    System.out.println("상품이름 : " + goodsTitle);
 %>
 <!DOCTYPE html>
 <html>
@@ -66,23 +64,30 @@
 }
 </style>
 <body>
-    <!--
-    작성자 id(hidden) 
-    상품번호(hidden) 
-    내용
-    별점
-    -->
-<div class="star-rating space-x-4 mx-auto">
-	<input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
-	<label for="5-stars" class="star pr-4">★</label>
-	<input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
-	<label for="4-stars" class="star">★</label>
-	<input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
-	<label for="3-stars" class="star">★</label>
-	<input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
-	<label for="2-stars" class="star">★</label>
-	<input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
-	<label for="1-star" class="star">★</label>
-</div>
+    <!-- 고객메뉴  -->
+    <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
+    
+    <h1>리뷰작성</h1>
+    <form method="post" action="/shop/customer/writeReviewAction.jsp">
+        <input type="hidden" name="ordersNo" value="<%=ordersNo %>">
+        <input type="hidden" name="cusId" value="<%=cusId %>">
+        <input type="hidden" name="goodsTitle" value="<%=goodsTitle %>">
+        <textarea name="content" rows="10" cols="50" placeholder="리뷰를 입력하세요."></textarea>
+        <div class="star-rating space-x-4 mx-auto">
+        	<input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+        	<label for="5-stars" class="star pr-4">★</label>
+        	<input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+        	<label for="4-stars" class="star">★</label>
+        	<input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+        	<label for="3-stars" class="star">★</label>
+        	<input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+        	<label for="2-stars" class="star">★</label>
+        	<input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+        	<label for="1-star" class="star">★</label>
+        </div>
+        <div>
+            <button type="submit">리뷰작성</button>
+        </div>
+    </form>
 </body>
 </html>

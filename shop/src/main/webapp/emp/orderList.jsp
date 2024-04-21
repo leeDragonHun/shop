@@ -60,7 +60,7 @@
                 <td><%=m.get("goodsNo") %></td>
                 <td><%=m.get("ea") %></td>
                 <td><%=m.get("state") %></td>
-                <td><a href="/shop/emp/startDelivery.jsp?ordersNo=<%=m.get("ordersNo")%>">배송</a></td>
+                <td><a href="/shop/emp/startDelivery.jsp?ordersNo=<%=m.get("ordersNo")%>">배송처리</a></td>
             </tr>
         <%
             }
@@ -78,7 +78,6 @@
                 <th>상품번호</th>
                 <th>주문갯수</th>
                 <th>주문상태</th>
-                <th>배송하기</th>
             </tr>
         <%
             for(HashMap<String, Object> m : allCompleteDelivery){
@@ -90,7 +89,6 @@
                 <td><%=m.get("goodsNo") %></td>
                 <td><%=m.get("ea") %></td>
                 <td><%=m.get("state") %></td>
-                <td><a href="/shop/emp/startDelivery.jsp?ordersNo=<%=m.get("ordersNo")%>">배송</a></td>
             </tr>
         <%
             }
