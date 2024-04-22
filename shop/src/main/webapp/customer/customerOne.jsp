@@ -1,3 +1,4 @@
+<%@page import="shop.dao.CustomerDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="shop.dao.GoodsDAO"%>
 <%@ page import="java.net.*"%>
@@ -17,8 +18,7 @@
     String rerrMsg = request.getParameter("rerrMsg");
     
     // 로그인 정보 호출
-    HashMap<String,Object> loginCus 
-    = (HashMap<String,Object>)(session.getAttribute("loginCus"));
+    HashMap<String,Object> loginCus = (HashMap<String,Object>)(session.getAttribute("loginCus"));
     // 로그인 ID 호출
     String cusId = (String)(loginCus.get("cus_id"));
     System.out.println("현재 로그인 사용자 : " + cusId);
@@ -31,6 +31,9 @@
     ArrayList<HashMap<String, Object>> CompleteBuy = GoodsDAO.CompleteBuy(cusId);
     // 리뷰 완료된 orders 데이터 출력
     ArrayList<HashMap<String, Object>> myReview = GoodsDAO.myReview(cusId);
+    
+    // 회원 정보 불러오기
+    ArrayList<HashMap<String, Object>> cusInfo = CustomerDAO.cusInfo(cusId);
 %>
 <!DOCTYPE html>
 <html>
@@ -58,7 +61,6 @@
     <%
         }
     %>
-    
     <h1>주문내역</h1>
     <fieldset>
         <legend>결제완료</legend>
@@ -87,7 +89,7 @@
     </fieldset>
     <fieldset>
         <legend>배송완료</legend>
-                <table border="1">
+            <table border="1">
             <tr>
                 <th>주문번호</th>
                 <th>상품이름</th>
@@ -114,7 +116,7 @@
     </fieldset>
     <fieldset>
         <legend>구매확정</legend>
-                <table border="1">
+            <table border="1">
             <tr>
                 <th>주문번호</th>
                 <th>상품이름</th>
@@ -141,7 +143,7 @@
     </fieldset>
     <fieldset>
         <legend>내가 쓴 리뷰관리</legend>
-                <table border="1">
+            <table border="1">
             <tr>
                 <th>상품이름</th>
                 <th>내용</th>
@@ -160,5 +162,32 @@
         %>
         </table>
     </fieldset>
+    <fieldset>
+        <legend>회원정보</legend>
+        <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>이름</t>
+            <th>생년월일</th>
+            <th>성별</th>
+            <th>주소</th>
+        </tr>
+        <%
+            for(HashMap<String, Object> m : cusInfo){
+        %>
+        <tr>
+            <td><%=m.get("cus_id") %></td>
+            <td><%=m.get("cus_name") %></td>
+            <td><%=m.get("birth") %></td>
+            <td><%=m.get("gender") %></td>
+            <td><%=m.get("address") %></td>
+        </tr>
+        <%
+            }
+        %>
+        </table>
+    </fieldset>
+    <a href="/shop/customer/customerModifyCheck.jsp">회원정보수정</a>
+    <a href="/shop/customer/customerDeleteCheck.jsp">회원 탈퇴</a>
 </body>
 </html>

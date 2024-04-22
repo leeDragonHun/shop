@@ -76,8 +76,9 @@
         <select name="ea">
         <%
         	for(int ea = 1; ea <= (Integer) (m.get("goodsAmount")); ea++){
+                int sum = (((Integer) (m.get("goodsPrice")))*ea);
         %>
-                 <option value="<%=ea%>"><%=ea%></option>
+                 <option value="<%=ea%>"><%=ea%>개 : <%=sum %> 원</option>`
         <%
         		}
         %>

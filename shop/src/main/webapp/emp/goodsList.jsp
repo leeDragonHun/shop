@@ -139,6 +139,10 @@
                                 <td><%=(Integer) (m.get("goodsPrice"))%></td>
                                 <td><%=(Integer) (m.get("goodsAmount"))%></td>
                             </tr>
+                            <tr>
+                                <td><a href="/shop/emp/modifyGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">수정</a></td>
+                                <td><a href="/shop/emp/deleteGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">삭제</a></td>
+                            </tr>
                         </table>
                     </div>
         <%

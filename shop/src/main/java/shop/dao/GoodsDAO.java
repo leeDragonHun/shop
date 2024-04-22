@@ -147,6 +147,30 @@ public class GoodsDAO {
 		return goodsOne;
 	}
 	
+	// 상품 삭제 메서드
+	public static int deleteGoods(int goodsNo) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "DELETE FROM goods WHERE goods_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goodsNo);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		conn.close();
+		return row;
+	}
+	
+	// 상품 삭제 할 때 톰캣서버로 올린 사진도 삭제
+	public static ResultSet goodsDeleteImg(int goodsNo) throws Exception {
+		Connection conn = DBHelper.getConnection();    
+	    String sql = "SELECT filename FROM goods WHERE goods_no= ?";
+	    PreparedStatement stmt = null;
+	    stmt = conn.prepareStatement(sql);
+	    stmt.setInt(1, goodsNo);
+	    ResultSet dfn = stmt.executeQuery();
+		return dfn;
+	}
+	
 	// 리뷰작성 메서드
 	public static int writeReview(int ordersNo, String cusId, String goodsTitle, String content, int rating) throws Exception {
 		int row = 0;
