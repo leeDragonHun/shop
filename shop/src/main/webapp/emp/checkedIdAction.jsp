@@ -4,11 +4,11 @@
 <%@ page import="java.net.URLEncoder"%>
 <%
     System.out.println("=====checkedIdAction.jsp====================================");
-    
-    // 로그인이 되어 있으면 리스트로 이동
-    if(session.getAttribute("loginCus")  != null) {
-        response.sendRedirect("/shop/customer/customerGoodsList.jsp");
-        return;
+
+    // 로그인 되어있으면(세션값 있으면) List로 가기
+    if(session.getAttribute("loginEmp") != null){ 
+        response.sendRedirect("/shop/emp/empList.jsp"); 
+        return; // 종료
     }
     String id = request.getParameter("id");
     System.out.println("id : " + id);
@@ -18,18 +18,18 @@
     String sql = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    sql = "SELECT cus_id FROM customer where cus_id = ?";
+    sql = "SELECT emp_id FROM emp where emp_id = ?";
     stmt = conn.prepareStatement(sql);
     stmt.setString(1, id);
     rs = stmt.executeQuery();
     
     if(rs.next()){
         String errMsg = URLEncoder.encode("아이디가 중복됩니다.", "UTF-8");
-    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?errMsg="+errMsg);
+    	response.sendRedirect("/shop/emp/addEmpForm.jsp?errMsg="+errMsg);
     	conn.close();
     } else {
     	String okMsg = URLEncoder.encode("사용가능한 아이디 입니다.", "UTF-8");
-    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?okMsg="+okMsg+"&id="+id);
+    	response.sendRedirect("/shop/emp/addEmpForm.jsp?okMsg="+okMsg+"&id="+id);
     	conn.close();
     }
 %>

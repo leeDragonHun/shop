@@ -33,15 +33,16 @@
     <table>
         <tr>
             <td>아이디</td>
-            <td><input type="text" name="empId" value="admin"></td>
+            <td><input type="text" name="empId"></td>
         </tr>
         <tr>
             <td>비밀번호</td>
-            <td><input type="password" name="empPw" value="1234"></td>
+            <td><input type="password" name="empPw"></td>
         </tr>
     </table>
     <button type="submit">로그인</button>
     </form>
-    <a href="/shop/customer/customerLoginForm.jsp">고객 로그인</a>
+    <a href="/shop/customer/customerLoginForm.jsp">회원 로그인</a>
+    <a href="/shop/emp/addEmpForm.jsp">직원 가입</a>
 </body>
 </html>

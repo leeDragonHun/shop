@@ -14,8 +14,8 @@
             <%=(String)(loginMember.get("empName"))%>
         </a>
     </span>
-	<span><a href="/shop/emp/empList.jsp">사원관리</a></span>
-    <span><a href="/shop/emp/customerList.jsp">고객관리</a></span>
+	<span><a href="/shop/emp/empList.jsp">사원목록</a></span>
+    <span><a href="/shop/emp/customerList.jsp">고객목록</a></span>
 	<span><a href="/shop/emp/categoryList.jsp">카테고리관리</a></span>
 	<span><a href="/shop/emp/goodsList.jsp?category=all">상품관리</a></span>
 	<span><a href="/shop/emp/orderList.jsp">주문내역관리</a></span>

@@ -44,6 +44,23 @@ public class EmpDAO {
 		return check;
 	}
 	
+	// 회원가입 액션
+	public static int addEmp(String id, String pw, String name) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "insert into emp(emp_id, grade, emp_pw, emp_name, emp_job, hire_date, update_date, create_date)"
+				+ " VALUES (?, '0', PASSWORD(?), ?, '사원', now(), now(), NOW())";
+
+		 PreparedStatement stmt = conn.prepareStatement(sql);
+		 stmt.setString(1, id);
+		 stmt.setString(2, pw);
+		 stmt.setString(3, name);
+		 row = stmt.executeUpdate();
+		 
+		 conn.close();
+		 return row;
+	}
+	
     // 직원 비밀번호 업데이트 메서드
 	public static int empPwModify(String empId, String empPw) throws Exception {
 		int row = 0;

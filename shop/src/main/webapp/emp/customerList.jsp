@@ -4,6 +4,7 @@
 <%@ page import="shop.dao.*" %>
 <!-- Controller Layer -->
 <%
+    System.out.println("=====customerList.jsp=======================================");
     // 로그오프면(세션값이 없으면) 로그인 폼으로 가기
     if(session.getAttribute("loginEmp") == null){ 
         response.sendRedirect("/shop/emp/empLoginForm.jsp"); 
