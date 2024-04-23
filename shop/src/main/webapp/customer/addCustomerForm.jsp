@@ -17,7 +17,9 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-	<title>addCustomerForm</title>
+	<title>회원가입</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
 </head>
 <body>
     <table>

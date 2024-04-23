@@ -24,7 +24,9 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>주문목록관리</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">    
 </head>
 <body>
     <!-- emp 메뉴 -->

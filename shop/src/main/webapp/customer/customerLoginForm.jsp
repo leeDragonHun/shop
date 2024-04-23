@@ -13,12 +13,14 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>회원 로그인</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
 </head>
 <body>
     <form method="post" action="/shop/customer/customerLoginAction.jsp">
         <table>
-            <h1>고객 로그인</h1>
+            <h1>회원 로그인</h1>
             <%
                 if(errMsg != null){
             %>

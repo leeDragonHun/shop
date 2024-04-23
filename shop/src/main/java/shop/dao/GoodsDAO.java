@@ -147,6 +147,25 @@ public class GoodsDAO {
 		return goodsOne;
 	}
 	
+	// 상품 수정 메서드
+	public static int modifyGoods(int goodsNo, String category, String goodsTitle, String goodsContent, int goodsPrice, int goodsAmount) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE goods SET category=?, goods_title=?, goods_content=?, goods_price=?, goods_amount=? WHERE goods_no = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, category);
+		stmt.setString(2, goodsTitle);
+		stmt.setString(3, goodsContent);
+		stmt.setInt(4, goodsPrice);
+		stmt.setInt(5, goodsAmount);
+		stmt.setInt(6, goodsNo);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		
+		conn.close();
+		return row;
+	}
+	
 	// 상품 삭제 메서드
 	public static int deleteGoods(int goodsNo) throws Exception {
 		int row = 0;

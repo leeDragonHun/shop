@@ -7,7 +7,9 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>비밀번호 확인</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">    
 </head>
 <body>
     <%

@@ -37,9 +37,11 @@
 %>
 <!DOCTYPE html>
 <html>
-	<head>
+<head>
 	<meta charset="UTF-8">
-	<title>customerOne</title>
+	<title>고객 마이페이지</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
 </head>
 <body>
     <!-- 고객메뉴  -->

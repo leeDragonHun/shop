@@ -28,6 +28,37 @@ public class EmpDAO {
 		return row;
 	}
 	
+	// id,pw확인(직원 개인정보수정 접근용)
+	public static boolean idPwCheck(String empId, String pw) throws Exception {
+		boolean check = false;
+		Connection conn = DBHelper.getConnection(); 
+		String sql = "select * FROM emp WHERE emp_id = ? and emp_pw = password(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,empId);
+		stmt.setString(2,pw);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			check = true;
+		}
+		conn.close();
+		return check;
+	}
+	
+    // 직원 비밀번호 업데이트 메서드
+	public static int empPwModify(String empId, String empPw) throws Exception {
+		int row = 0;
+		Connection conn = DBHelper.getConnection();
+		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, empPw);
+		stmt.setString(2, empId);
+		row = stmt.executeUpdate();
+		System.out.println(stmt);
+		
+		conn.close();
+		return row;
+	}
+	
 	
 	// HashMap<String, Object> : null이면 로그인실패, 아니면 성공
 	// String empId, String empPw : 로그인폼에서 사용자가 입력한 id/pw
@@ -41,7 +72,7 @@ public class EmpDAO {
 		// DB 접근
 		Connection conn = DBHelper.getConnection(); 
 		
-		String sql = "select emp_id empId, emp_name empName, grade FROM emp WHERE active = 'ON' and emp_id =? and emp_pw = password(?)";
+		String sql = "select emp_id empId, emp_name empName, grade, emp_job empJob, hire_date hireDate FROM emp WHERE active = 'ON' and emp_id =? and emp_pw = password(?)";
 		PreparedStatement stmt=conn.prepareStatement(sql);
 		stmt.setString(1,empId);
 		stmt.setString(2,empPw);
@@ -51,6 +82,8 @@ public class EmpDAO {
 			resultMap.put("empId", rs.getString("empId"));
 			resultMap.put("empName", rs.getString("empName"));
 			resultMap.put("grade", rs.getInt("grade"));
+			resultMap.put("empJob", rs.getString("empJob"));
+			resultMap.put("hireDate", rs.getString("hireDate"));
 		}
 		conn.close();
 		return resultMap;
@@ -81,7 +114,7 @@ public class EmpDAO {
 		if(totalRowRs.next()) {
 			totalRow = totalRowRs.getInt("count(*)");
 		}
-		System.out.println(totalRow + " <-- totalRow");
+		System.out.println("totalRow : " + totalRow);
 		conn.close();
 		return totalRow;
 	}

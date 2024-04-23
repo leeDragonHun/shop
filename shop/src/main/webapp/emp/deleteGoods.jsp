@@ -14,7 +14,7 @@
     	return;
     }
     
-    // goods_no 요청
+    // goods_no int타입으로 요청
     int goodsNo = Integer.parseInt(request.getParameter("goodsNo"));
     System.out.println("상품번호 넘어온 값 : " + goodsNo);
     

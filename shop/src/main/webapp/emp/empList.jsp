@@ -17,8 +17,6 @@
     String loginId = null;
     loginId = request.getParameter("loginId");
     
-    System.out.println("loginId : " + loginId);
-
     // DB 연동
     Connection conn = DBHelper.getConnection();
     
@@ -43,7 +41,7 @@
 	if(totalRow%rowPerPage != 0) {
 		lastPage = lastPage + 1;
 	}
-	System.out.println(lastPage + " <-- lastPage");
+	System.out.println("lastPage : " + lastPage);
     
     // 직원목록조회
     ArrayList<HashMap<String,Object>> list = EmpDAO.list(startRow, rowPerPage);
@@ -56,6 +54,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="UTF-8">
 	<title>사원 관리</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
 </head>
 <body>
     <!-- empMenu.jsp include : 주체(서버) vs redirect(주체:클라이언트) 어디 있는 거 불러올 수 있는-->

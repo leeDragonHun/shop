@@ -31,9 +31,9 @@
 		session.setAttribute("loginEmp", loginEmp);
         
 		HashMap<String, Object> m = (HashMap<String, Object>)(session.getAttribute("loginEmp"));
-		System.out.println((String)(m.get("empId"))); // 로그인 된 empId
-		System.out.println((String)(m.get("empName"))); // 로그인 된 empName
-		System.out.println((Integer)(m.get("grade"))); // 로그인 된 grade
+		System.out.println("로그인 empId : " + (String)(m.get("empId"))); // 로그인 된 empId
+		System.out.println("로그인 empName : " + (String)(m.get("empName"))); // 로그인 된 empName
+		System.out.println("로그인 grade : " + (Integer)(m.get("grade"))); // 로그인 된 grade
 
 		response.sendRedirect("/shop/emp/empList.jsp");
     }else{

@@ -5,7 +5,7 @@
 <!-- Controller Layer -->
 <%
     System.out.println("=====goodsList.jsp==========================================");
-    // 인증분기	 : 세션변수 이름 - loginEmp
+    // 로그인 인증우회
     if(session.getAttribute("loginEmp") == null) {
     	response.sendRedirect("/shop/emp/empLoginForm.jsp");
     	return;
@@ -84,6 +84,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>상품관리</title>
+    <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">    
 </head>
 <body>
     <!-- 메인메뉴 -->
