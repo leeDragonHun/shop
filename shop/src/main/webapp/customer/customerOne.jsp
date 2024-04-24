@@ -42,6 +42,8 @@
 	<title>고객 마이페이지</title>
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="/shop/style.css" rel="stylesheet" type="text/css">    
 </head>
 <body>
     <!-- 고객메뉴  -->
@@ -191,5 +193,6 @@
     </fieldset>
     <a href="/shop/customer/customerModifyCheck.jsp">회원정보수정</a>
     <a href="/shop/customer/customerDeleteCheck.jsp">회원 탈퇴</a>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>
