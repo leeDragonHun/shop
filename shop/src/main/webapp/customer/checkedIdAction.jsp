@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="shop.dao.*" %>
-<%@ page import="java.net.URLEncoder"%>
+<%@ page import="java.net.*"%>
 <%
     System.out.println("=====checkedIdAction.jsp====================================");
     
@@ -24,12 +24,12 @@
     rs = stmt.executeQuery();
     
     if(rs.next()){
-        String errMsg = URLEncoder.encode("아이디가 중복됩니다.", "UTF-8");
-    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?errMsg="+errMsg);
+        String msg = URLEncoder.encode("아이디가 중복됩니다.", "UTF-8");
+    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?msg="+msg);
     	conn.close();
     } else {
-    	String okMsg = URLEncoder.encode("사용가능한 아이디 입니다.", "UTF-8");
-    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?okMsg="+okMsg+"&id="+id);
+    	String msg = URLEncoder.encode("사용가능한 아이디 입니다.", "UTF-8");
+    	response.sendRedirect("/shop/customer/addCustomerForm.jsp?msg="+msg+"&id="+id);
     	conn.close();
     }
 %>

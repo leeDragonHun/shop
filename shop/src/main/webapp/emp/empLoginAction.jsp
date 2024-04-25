@@ -35,7 +35,7 @@
 		System.out.println("로그인 empName : " + (String)(m.get("empName"))); // 로그인 된 empName
 		System.out.println("로그인 grade : " + (Integer)(m.get("grade"))); // 로그인 된 grade
 
-		response.sendRedirect("/shop/emp/empList.jsp");
+		response.sendRedirect("/shop/emp/goodsList.jsp");
     }else{
         System.out.println("로그인 실패");
         response.sendRedirect("/shop/emp/empLoginForm.jsp");

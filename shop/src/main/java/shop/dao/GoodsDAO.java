@@ -105,7 +105,9 @@ public class GoodsDAO {
 	// 카테고리 보여주는 메서드
 	public static  ArrayList<HashMap<String, Object>> selectCategory() throws Exception {
 		Connection conn = DBHelper.getConnection();
-		String sql1 = "select category, count(*) cnt from goods group by category order by create_date asc";
+		// 이전 쿼리문 : String sql1 = "select category, count(*) cnt from goods group by category order by category desc";
+		// '기타' 가 맨 뒤에 오게.
+		String sql1 = "SELECT category, COUNT(*) AS cnt FROM goods GROUP BY category ORDER BY CASE WHEN category = '기타' THEN 1 ELSE 0 END, category DESC";
 		PreparedStatement stmt1 = conn.prepareStatement(sql1);
 		ResultSet rs1 = stmt1.executeQuery();
 		ArrayList<HashMap<String, Object>> categoryList =
@@ -439,39 +441,3 @@ public class GoodsDAO {
 		return list;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

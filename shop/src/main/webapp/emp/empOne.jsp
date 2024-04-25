@@ -33,7 +33,7 @@
         <jsp:include page="/emp/inc/empMenu.jsp"></jsp:include>
     </div>
     <h1>나의 정보</h1>
-    <table border="1">
+    <table class="table">
         <tr>
             <th>아이디</th>
             <th>등급</th>
@@ -51,10 +51,11 @@
             </tr>
         </tr>
         <tr>
-            <td colspan="5">직원 정보는 개인이 수정 불가합니다. 인사과에 문의하세요.</td>
+            <td colspan="5">
+                <a href="/shop/emp/empModifyCheck.jsp">비밀번호 수정</a>
+            </td>
         </tr>
     </table>
-    <a href="/shop/emp/empModifyCheck.jsp">비밀번호 수정</a>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>

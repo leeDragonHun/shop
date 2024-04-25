@@ -113,136 +113,137 @@
             }
         %>
     <br>
-        <div>
-           <a><%=currentPage%> Page</a>
-           <%System.out.println("currentPage : " + currentPage);%>
-           <form method="post" action="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&rowPerPage=<%=rowPerPage%>">
-               <select name="order">
-                   <option value="">오래된순</option>
-                   <option value="new">최신순</option>
-                   <option value="high">높은가격순</option>
-                   <option value="low">낮은가격순</option>
-               </select>
-               <button type="submit">설정</button>
-           </form>
-        </div>
-        <%
-                for(HashMap<String, Object> m : goodsList){
-        %>
-                    <div style="width:20%; float:left">
-                        <table border="1" width="90%" height="90%">
-                            <tr>
-                                <td colspan="2">
-                                    <img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><%=(String) (m.get("goodsTitle"))%></td>
-                            </tr>
-                            <tr>
-                                <td><%=(Integer) (m.get("goodsPrice"))%></td>
-                                <td><%=(Integer) (m.get("goodsAmount"))%></td>
-                            </tr>
-                            <tr>
-                                <td><a href="/shop/emp/modifyGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">수정</a></td>
-                                <td><a href="/shop/emp/deleteGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">삭제</a></td>
-                            </tr>
-                        </table>
-                    </div>
-        <%
-                }
-        %>  
-        
-        
+    <div>
+       <a><%=currentPage%> Page</a>
+       <%System.out.println("currentPage : " + currentPage);%>
+       <form method="post" action="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&rowPerPage=<%=rowPerPage%>">
+           <select name="order">
+               <option value="">오래된순</option>
+               <option value="new">최신순</option>
+               <option value="high">높은가격순</option>
+               <option value="low">낮은가격순</option>
+           </select>
+           <button type="submit">설정</button>
+       </form>
+    </div>
+    
+    <%
+        for(HashMap<String, Object> m : goodsList){
+    %>
+            <div style="width:20%; float:left">
+                <table border="1" width="90%" height="90%">
+                    <tr>
+                        <td colspan="2">
+                            <a href="/shop/emp/empGoodsOne.jsp?goodsNo=<%=(String)(m.get("goodsNo"))%>">
+                                <img alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><%=(String) (m.get("goodsTitle"))%></td>
+                    </tr>
+                    <tr>
+                        <td><%=(Integer) (m.get("goodsPrice"))%></td>
+                        <td><%=(Integer) (m.get("goodsAmount"))%></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/shop/emp/modifyGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">수정</a></td>
+                        <td><a href="/shop/emp/deleteGoods.jsp?goodsNo=<%=(String) (m.get("goodsNo"))%>">삭제</a></td>
+                    </tr>
+                </table>
+            </div>
+    <%
+        }
+    %>  
           
-        <!-- 한 페이지에 표시할 갯수 정하기 -->
-        <div style="clear:left">
-            <form method="get" action="/shop/emp/goodsList.jsp">
-                <input type="hidden" name="order" value="<%=order %>">
-                <input type="hidden" name="searchWord" value="<%=searchWord %>">
-                <input type="hidden" name="category" value="<%=category %>">
-                표시할 상품 수 : 
-                <select name="rowPerPage">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-                <button type="submit">개 보기</button>
-            </form>
-        </div>
+    <!-- 한 페이지에 표시할 갯수 정하기 -->
+    <div style="clear:left">
+        <form method="get" action="/shop/emp/goodsList.jsp">
+            <input type="hidden" name="order" value="<%=order %>">
+            <input type="hidden" name="searchWord" value="<%=searchWord %>">
+            <input type="hidden" name="category" value="<%=category %>">
+            표시할 상품 수 : 
+            <select name="rowPerPage">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+            <button type="submit">개 보기</button>
+        </form>
+    </div>
         
         
         
-        <!-- 페이징 버튼 -->
-        <div>
-            <%
-                if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
-                    if(lastPage == 1){
-            %>
-                        <a>&#60;&#60;</a>
-                        <a>&#60;</a>
-                        <a>&#62;</a>
-                        <a>&#62;&#62;</a>                        
-            <%
-                    }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
-            %>
-                        <a>&#60;&#60;</a>
-                        <a>&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
-            <%      
-                    } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
-            %>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a>&#62;</a>
-                        <a>&#62;&#62;</a>
-            <%      
-                    } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
-            %>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
-            <%
-                    }
-                }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
-                    if(lastPage == 1){
-            %>
-                        <a>&#60;&#60;</a>
-                        <a>&#60;</a>
-                        <a>&#62;</a>
-                        <a>&#62;&#62;</a>                        
-            <%
-                    }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
-            %>
-                        <a>&#60;&#60;</a>
-                        <a>&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
-            <%      
-                    } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
-            %>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a>&#62;</a>
-                        <a>&#62;&#62;</a>
-            <%      
-                    } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
-            %>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
-            <%                          
-                    }
+    <!-- 페이징 버튼 -->
+    <div>
+        <%
+            if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
+                if(lastPage == 1){
+        %>
+                    <a>&#60;&#60;</a>
+                    <a>&#60;</a>
+                    <a>&#62;</a>
+                    <a>&#62;&#62;</a>                        
+        <%
+                }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
+        %>
+                    <a>&#60;&#60;</a>
+                    <a>&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+        <%      
+                } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
+        %>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                    <a>&#62;</a>
+                    <a>&#62;&#62;</a>
+        <%      
+                } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
+        %>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                    <a href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+        <%
                 }
-            %>              
+            }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
+                if(lastPage == 1){
+        %>
+                    <a>&#60;&#60;</a>
+                    <a>&#60;</a>
+                    <a>&#62;</a>
+                    <a>&#62;&#62;</a>                        
+        <%
+                }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
+        %>
+                    <a>&#60;&#60;</a>
+                    <a>&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+        <%      
+                } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
+        %>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                    <a>&#62;</a>
+                    <a>&#62;&#62;</a>
+        <%      
+                } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
+        %>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                    <a href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+        <%                          
+                }
+            }
+        %>              
         </div>
     </div>
     <form mothod="get" action="/shop/emp/goodsList.jsp">

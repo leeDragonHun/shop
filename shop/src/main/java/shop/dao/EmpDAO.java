@@ -256,7 +256,9 @@ public class EmpDAO {
 	    PreparedStatement stmt1 = null;
 	    ResultSet rs1 = null;
 	    Connection conn = DBHelper.getConnection();
-	    String sql1 = "select category from category order by create_date asc";
+	    // 이전 쿼리문 : String sql1 = "select category from category group by category order by category desc";
+	    //  '기타' 가 맨 뒤에 오게.
+	    String sql1 = "SELECT category FROM category GROUP BY category ORDER BY CASE WHEN category = '기타' THEN 1 ELSE 0 END, category DESC";
 	    stmt1 = conn.prepareStatement(sql1);
 	    rs1 = stmt1.executeQuery();
 	    while(rs1.next()) {
@@ -300,31 +302,3 @@ public class EmpDAO {
 		return dfn;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -10,6 +10,8 @@
 
     // 에러메시지 받기.
     String errMsg = request.getParameter("errMsg");
+    // 회원가입 성공 후 승인대기하라는 메시지 받기.
+    String msg = request.getParameter("msg");
 %>
 <!DOCTYPE html>
 <html>
@@ -27,6 +29,13 @@
         if(errMsg != null){
     %>
             <%=errMsg %>
+    <%
+        }
+    %>
+    <%
+        if(msg != null){
+    %>
+            <%=msg %>
     <%
         }
     %>
