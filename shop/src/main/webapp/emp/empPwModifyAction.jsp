@@ -31,5 +31,4 @@
     	String errMsg = URLEncoder.encode("수정 실패. 확인 후 다시 시도하세요.", "UTF-8");
     	response.sendRedirect("/shop/emp/empPwModify.jsp?errMsg="+errMsg);
     }
-    
 %>
