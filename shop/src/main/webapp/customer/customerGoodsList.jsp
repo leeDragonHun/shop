@@ -103,8 +103,12 @@
     height: 100%; /* 이미지 높이를 .carousel-item의 높이에 맞춥니다 */
     object-fit: cover; /* 이미지가 비율을 유지하면서 지정된 높이와 너비를 채우도록 설정 */
   }
+  .navbar-nav .nav-link,
+  .navbar-toggler-icon {
+    color: white; /* 텍스트 색상을 흰색으로 지정 */
+  }
 </style>
-<body>
+<body class="bg-dark text-white" >
     <!-- 주문 실패시 에러 메시지 -->
     <%
         if(errMsg != null){
@@ -114,9 +118,9 @@
         }
     %>
     <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-dark">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">
                 <img src="/shop/mindMap/d.ico" alt="poterMore" width="30" height="24">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +129,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=5">Poter More</a>
+                  <a class="nav-link active text-white" aria-current="page" href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">Poter More</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/shop/customer/customerGoodsList.jsp?category=all&rowPerPage=<%=rowPerPage%>">
@@ -154,7 +158,7 @@
     </div>
     
     <!-- 캐러셀 -->
-    <div id="carouselExampleCaptions" class="mt-3 carousel slide container">
+    <div id="carouselExampleCaptions" class="carousel slide container">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -207,7 +211,7 @@
                            </select>
                        </td>
                        <td>
-                          <button type="submit" class="btn btn-outline-dark">설정</button>
+                          <button type="submit" class="btn btn-light">설정</button>
                           </form>
                        </td>
                    </tr>
@@ -235,7 +239,7 @@
                         <option value="20">20개</option>
                         </select>
                     </td>
-                    <td><button type="submit" class="btn btn-outline-dark">보기</button></td>
+                    <td><button type="submit" class="btn btn-light">보기</button></td>
                 </tr>
             </form>
             </table>
@@ -247,7 +251,7 @@
             for(HashMap<String, Object> m : goodsList){
         %>
             	<div class="m-1 " style="width:19%; float:left">
-                    <table class="table table-bordered">
+                    <table class="table table-dark table-borderless">
                         <tr>
                             <td colspan="2">
                                 <a href="/shop/customer/goodsOne.jsp?goodsNo=<%=(String)(m.get("goodsNo"))%>">
@@ -286,61 +290,61 @@
                 if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
                     if(lastPage == 1){
             %>
-                    	<a class="btn btn-outline-dark">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark">&#60;</a>
-                        <a class="btn btn-outline-dark">&#62;</a>
-                        <a class="btn btn-outline-dark">&#62;&#62;</a>                        
+                    	<a class="btn btn-light">&#60;&#60;</a>
+                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-light">&#62;</a>
+                        <a class="btn btn-light">&#62;&#62;</a>                        
             <%
                     }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-outline-dark">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark">&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+                        <a class="btn btn-light">&#60;&#60;</a>
+                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%      
                     } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-outline-dark">&#62;</a>
-                        <a class="btn btn-outline-dark">&#62;&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                        <a class="btn btn-light">&#62;</a>
+                        <a class="btn btn-light">&#62;&#62;</a>
             <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
             %>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%
                     }
                 }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
                     if(lastPage == 1){
             %>
-                        <a class="btn btn-outline-dark">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark">&#60;</a>
-                        <a class="btn btn-outline-dark">&#62;</a>
-                        <a class="btn btn-outline-dark">&#62;&#62;</a>                        
+                        <a class="btn btn-light">&#60;&#60;</a>
+                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-light">&#62;</a>
+                        <a class="btn btn-light">&#62;&#62;</a>                        
             <%
                     }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-outline-dark">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark">&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+                        <a class="btn btn-light">&#60;&#60;</a>
+                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%      
                     } else if(currentPage == lastPage) {/* 마지막 페이지 화살표(다음과 끝 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-outline-dark">&#62;</a>
-                        <a class="btn btn-outline-dark">&#62;&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                        <a class="btn btn-light">&#62;</a>
+                        <a class="btn btn-light">&#62;&#62;</a>
             <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
             %>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
-                        <a class="btn btn-outline-dark" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
+                        <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%                          
                     }
                 }
@@ -367,15 +371,15 @@
                     </select>
                 </td>
                 <td><input type="text" name="searchWord" class="form-control"></td>
-                <td><button type="submit" class="btn btn-outline-dark">검색</button></td>
+                <td><button type="submit" class="btn btn-light">검색</button></td>
             </tr>
         </form>
         </table>
     </div>
     
+    <!-- 푸터 -->
     <footer>
         <div class="container">
-        
             <div>
                 POTER MORE
             </div>
