@@ -34,6 +34,14 @@
     
     // 회원 정보 불러오기
     ArrayList<HashMap<String, Object>> cusInfo = CustomerDAO.cusInfo(cusId);
+    
+    // 카테고리 선택 메뉴
+    ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
+    System.out.println("categoryList : " + categoryList); 
+    
+    // 전체의 '갯수' 나타내기
+    int allCnt = GoodsDAO.goodsListCnt("", "");
+    System.out.println("allCount : " + allCnt); 
 %>
 <!DOCTYPE html>
 <html>
@@ -45,9 +53,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="/shop/style.css" rel="stylesheet" type="text/css">    
 </head>
-<body>
-    <!-- 고객메뉴  -->
-    <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
+<style>
+  .navbar-nav .nav-link,
+  .navbar-toggler-icon {
+    color: white; /* 텍스트 색상을 흰색으로 지정 */
+  }
+</style>
+<body class="bg-dark text-white" >
+    <div class="container">
+        <!-- 네비게이션 바-->
+        <nav class="navbar navbar-expand-lg bg-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/shop/customer/customerGoodsList.jsp?">
+                <img src="/shop/mindMap/d.ico" alt="poterMore" width="30" height="24">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active text-white" aria-current="page" href="/shop/customer/customerGoodsList.jsp?">Poter More</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/shop/customer/customerGoodsList.jsp?">
+                    All (<%=allCnt %>)
+                  </a>
+                </li>
+                    <%
+                        for(HashMap m : categoryList) {
+                    %>
+                            <li class="nav-item">
+                                <a class="nav-link"  href="/shop/customer/customerGoodsList.jsp">
+                                    <%=(String)(m.get("category"))%>  (<%=(Integer)(m.get("cnt"))%>)
+                                </a>
+                            </li>
+                    <%      
+                        }
+                    %>
+              </ul>
+              <form class="d-flex text-outline-dark" role="search">
+                  <!-- 고객메뉴  -->
+                  <jsp:include page="/customer/inc/customerMenu.jsp"></jsp:include>
+              </form>
+            </div>
+          </div>
+        </nav>
     
     <!-- 구매확정 실패 에러메시지 -->
     <%
@@ -65,10 +116,15 @@
     <%
         }
     %>
+    <br><br><br>
+    
     <h1>주문내역</h1>
+    
+    <br><br><br>
+    
     <fieldset>
         <legend>결제완료</legend>
-        <table border="1">
+        <table class="table table-dark">
             <tr>
                 <th>주문번호</th>
                 <th>상품이름</th>
@@ -91,9 +147,12 @@
         %>
         </table>
     </fieldset>
+    
+    <br><br><br>
+    
     <fieldset>
         <legend>배송완료</legend>
-            <table border="1">
+            <table class="table table-dark">
             <tr>
                 <th>주문번호</th>
                 <th>상품이름</th>
@@ -111,16 +170,19 @@
                 <td><%=m.get("goodsNo") %></td>
                 <td><%=m.get("ea") %></td>
                 <td><%=m.get("state") %></td>
-                <td><a href="/shop/customer/completeBuy.jsp?ordersNo=<%=m.get("ordersNo") %>">구매확정</a></td>
+                <td><a class="btn btn-light" href="/shop/customer/completeBuy.jsp?ordersNo=<%=m.get("ordersNo") %>">구매확정</a></td>
             </tr>
         <%
             }
         %>
         </table>
     </fieldset>
+    
+    <br><br><br>
+    
     <fieldset>
         <legend>구매확정</legend>
-            <table border="1">
+            <table class="table table-dark">
             <tr>
                 <th>주문번호</th>
                 <th>상품이름</th>
@@ -138,16 +200,19 @@
                 <td><%=m.get("goodsNo") %></td>
                 <td><%=m.get("ea") %></td>
                 <td><%=m.get("state") %></td>
-                <td><a href="/shop/customer/writeReview.jsp?ordersNo=<%=m.get("ordersNo") %>&goodsTitle=<%=m.get("goodsTitle") %>">작성하기</a></td>
+                <td><a class="btn btn-light" href="/shop/customer/writeReview.jsp?ordersNo=<%=m.get("ordersNo") %>&goodsTitle=<%=m.get("goodsTitle") %>">작성하기</a></td>
             </tr>
         <%
             }
         %>
         </table>
     </fieldset>
+    
+    <br><br><br>
+    
     <fieldset>
         <legend>내가 쓴 리뷰관리</legend>
-            <table border="1">
+            <table class="table table-dark">
             <tr>
                 <th>상품이름</th>
                 <th>내용</th>
@@ -166,15 +231,19 @@
         %>
         </table>
     </fieldset>
+    
+    <br><br><br>
+    
     <fieldset>
         <legend>회원정보</legend>
-        <table border="1">
+        <table  class="table table-dark">
         <tr>
             <th>아이디</th>
             <th>이름</t>
             <th>생년월일</th>
             <th>성별</th>
             <th>주소</th>
+            <th>개인정보수정</th>
         </tr>
         <%
             for(HashMap<String, Object> m : cusInfo){
@@ -185,14 +254,24 @@
             <td><%=m.get("birth") %></td>
             <td><%=m.get("gender") %></td>
             <td><%=m.get("address") %></td>
+            <td>
+                <a class="btn btn-light" href="/shop/customer/customerModifyCheck.jsp">회원정보수정</a>
+                <a class="btn btn-light" href="/shop/customer/customerDeleteCheck.jsp">회원 탈퇴</a>
+            </td>
         </tr>
         <%
             }
         %>
         </table>
     </fieldset>
-    <a href="/shop/customer/customerModifyCheck.jsp">회원정보수정</a>
-    <a href="/shop/customer/customerDeleteCheck.jsp">회원 탈퇴</a>
+    
+    <br>
+    
+    <br>
+    
+    <br>
+    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>
