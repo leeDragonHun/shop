@@ -16,11 +16,11 @@
     HashMap<String,Object> loginCus 
     = (HashMap<String,Object>)(session.getAttribute("loginCus"));
     
-    // 로그인 ID 호출
+    // 로그인 ID 호출 후 디버깅
     String cusId = (String)(loginCus.get("cus_id"));
     System.out.println("현재 로그인 사용자 : " + cusId);
     
-    // 비밀번호 값 요청
+    // 비밀번호 값 요청 후 디버깅
     String pw = request.getParameter("pw");
     System.out.println("입력한 비밀번호 : " + pw);
     

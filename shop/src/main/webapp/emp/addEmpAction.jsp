@@ -10,18 +10,21 @@
         return; // 종료
     }
 
+    // 호출값 인코딩
     request.setCharacterEncoding("UTF-8");
     
+    // id, pw, name 호출 후 디버깅
     String id = request.getParameter("id");
     String pw = request.getParameter("pw");
     String name = request.getParameter("name");
-    
     System.out.println("id : " + id);
     System.out.println("pw : " + pw);
     System.out.println("name : " + name);
     
+    // 직원 회원가입 메서드
     int addEmp = EmpDAO.addEmp(id, pw, name);
     
+    // 지원 회원가입 여부 분기문
     if(addEmp >= 1){
         System.out.println("회원가입 완료");
         String msg = URLEncoder.encode("가입 승인 대기중입니다. 담당자 : 인사총무과/덤블도어 tel)010-1234-5678", "UTF-8");

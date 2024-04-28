@@ -19,15 +19,8 @@
     }
     retireEmp = request.getParameter("retireEmp");
     System.out.println("retireEmp : " + retireEmp);
-    
-    // DB연동 및 쿼리문 추가
-/*     Connection conn = DBHelper.getConnection();
-	PreparedStatement stmt = null;
-	String sql = "UPDATE emp SET ACTIVE='OFF' WHERE emp_id = ? ";
-    stmt = conn.prepareStatement(sql);
-    stmt.setString(1,retireEmp);
-    System.out.println("stmt : " + stmt); */
-    
+
+     // active 권한 off 하는 메서드   
     int row = EmpDAO.onOff(retireEmp);
     
     // 완료시 다시 리스트로
@@ -38,5 +31,4 @@
     } else {
         System.out.println("권한 해제 실패");      
     }
-    // 자원반납
 %>

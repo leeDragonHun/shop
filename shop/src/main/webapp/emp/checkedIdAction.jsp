@@ -10,19 +10,27 @@
         response.sendRedirect("/shop/emp/empList.jsp"); 
         return; // 종료
     }
+    
+    // id 값 호출
     String id = request.getParameter("id");
     System.out.println("id : " + id);
     
+    // DB 연결
     Connection conn = DBHelper.getConnection();
     
+    // 선언문
     String sql = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
+    
+    // 아이디 중복확인
     sql = "SELECT emp_id FROM emp where emp_id = ?";
     stmt = conn.prepareStatement(sql);
     stmt.setString(1, id);
     rs = stmt.executeQuery();
+    System.out.println(stmt);
     
+    // 아이디 중복 확인 분기문
     if(rs.next()){
         String errMsg = URLEncoder.encode("아이디가 중복됩니다.", "UTF-8");
     	response.sendRedirect("/shop/emp/addEmpForm.jsp?errMsg="+errMsg);

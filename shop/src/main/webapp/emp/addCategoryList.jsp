@@ -5,7 +5,7 @@
 <%
     System.out.println("=====addCategoryList.jsp====================================");
 
-    // 인증분기  : 세션변수 이름 - loginEmp
+    //로그인 인증분기
     if(session.getAttribute("loginEmp") == null) {
         response.sendRedirect("/shop/emp/empLoginForm.jsp");
         return;
@@ -16,9 +16,10 @@
     String categoryName = request.getParameter("categoryName");
     System.out.println("categoryName : " + categoryName);
     
+    // 카테고리 추가 메서드
     int row = EmpDAO.insertCategory(categoryName);
     
-	// 추가성공하면 -> 
+	// 성공여부 분기문
 	if(row == 1){
 		System.out.println("카테고리 추가 완료 : " + row);
 		response.sendRedirect("/shop/emp/categoryList.jsp");

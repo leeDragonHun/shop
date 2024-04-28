@@ -2,10 +2,15 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.net.*" %>
 <%@ page import="shop.dao.*" %>
+<!-- Model Layer -->
 <%
     System.out.println("=====customerModifyCheck.jsp===============================");
+
+    // 에러메시지 호출
     String errMsg = request.getParameter("errMsg");
-    
+%>
+<!-- Controller Layer -->
+<%
     // 카테고리 선택 메뉴
     ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
     System.out.println("categoryList : " + categoryList); 
@@ -14,6 +19,7 @@
     int allCnt = GoodsDAO.goodsListCnt("", "");
     System.out.println("allCount : " + allCnt); 
 %>
+<!-- View Layer -->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -22,7 +28,7 @@
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/shop/style.css" rel="stylesheet" type="text/css">     
+    <link href="/shop/style/style.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   .navbar-nav .nav-link,
@@ -70,25 +76,25 @@
             </div>
           </div>
         </nav>
-    <%
-        if(errMsg != null){
-    %>
-            <%=errMsg %>
-    <%
-        }
-    %>
-    <form method="post" action="customerModifyCheckAction.jsp">
-    <table>
-        <tr>
-            <td>비밀번호 &nbsp;</td>
-            <td><input class="form-control" type="password" name="pw"></td>
-            <td>&nbsp;</td>
-            <td><button class="btn btn-light" type="submit">인증</button></td>
-        </tr>
-    </table>
-    </form>
-    <br>
-    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
+        <%
+            if(errMsg != null){
+        %>
+                <%=errMsg %>
+        <%
+            }
+        %>
+        <form method="post" action="customerModifyCheckAction.jsp">
+        <table>
+            <tr>
+                <td>비밀번호 &nbsp;</td>
+                <td><input class="form-control" type="password" name="pw"></td>
+                <td>&nbsp;</td>
+                <td><button class="btn btn-light" type="submit">인증</button></td>
+            </tr>
+        </table>
+        </form>
+        <br> <br>
+        <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>

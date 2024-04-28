@@ -2,12 +2,13 @@
 <%
     System.out.println("customerLogoutAction.jsp========================================================");
 
-    // 로그오프면(세션값이 없으면) 로그인 폼으로 가기
+    //로그인 인증분기
     if(session.getAttribute("loginCus") == null){ 
         response.sendRedirect("/shop/customer/customerLoginForm.jsp"); 
         return; // 종료
     }
 
+    // 세션값 비우기
 	session.invalidate();
 	response.sendRedirect("/shop/customer/customerLoginForm.jsp");
 %>

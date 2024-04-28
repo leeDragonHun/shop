@@ -2,6 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.net.*" %>
 <%@ page import="shop.dao.*" %>
+<!-- Model Layer -->
 <%
     System.out.println("=====modifyEmpActive.jsp====================================");
  
@@ -20,16 +21,8 @@
     requestEmp = request.getParameter("requestEmp");
     System.out.println("requestEmp : " + requestEmp);
     
-    // DB연동 및 쿼리문 추가
-    /*     Connection conn = DBHelper.getConnection();
-	PreparedStatement stmt = null;
-	String sql = "UPDATE emp SET ACTIVE='ON' WHERE emp_id = ? ";
-    stmt = conn.prepareStatement(sql);
-    stmt.setString(1,requestEmp);
-    System.out.println("stmt : " + stmt);
-    int row = stmt.executeUpdate();
-     */
-     int row = EmpDAO.offOn(requestEmp);
+    // active 권한 ON 하는 메서드
+    int row = EmpDAO.offOn(requestEmp);
      
     // 완료시 다시 리스트로
     if(row == 1) {
@@ -39,6 +32,4 @@
     } else {
         System.out.println("권한 부여 실패");      
     }
-    // 자원반납
-    
 %>

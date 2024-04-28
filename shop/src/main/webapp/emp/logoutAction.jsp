@@ -7,7 +7,8 @@
         response.sendRedirect("/shop/emp/emploginForm.jsp"); 
         return; // 종료
     }
-
+    
+    // 세션 값 비우기
 	session.invalidate();
 	response.sendRedirect("/shop/emp/empLoginForm.jsp");
 %>

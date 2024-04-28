@@ -5,21 +5,18 @@
 <%@ page import="java.io.*" %>
 <%@ page import="java.nio.file.*" %>
 <%@ page import="shop.dao.*" %>
-<!-- Controller Layer -->
 <%
     System.out.println("=====addGoodsAction.jsp=====================================");
     
+    // 호출값 인코딩
     request.setCharacterEncoding("UTF-8");
+    
     // 로그인 인증 우회
     if(session.getAttribute("loginEmp") == null) {
         response.sendRedirect("/shop/emp/empLoginForm.jsp");
         return;
     }
-%>  
-<!-- Model Layer -->
-<%
-
-
+    // 추가할 상품의 정보 호출
     String category = request.getParameter("category");
     String empId = request.getParameter("empId");
     String goodsTitle = request.getParameter("goodsTitle");
@@ -29,6 +26,7 @@
     String goodsContent = request.getParameter("goodsContent");
     Part part = request.getPart("goodsImg");
     String originalName = part.getSubmittedFileName();
+    
     // 원본이름에서 확장자만 분리
     int dotIdx = originalName.lastIndexOf(".");
     String ext = originalName.substring(dotIdx); // .png
@@ -38,6 +36,7 @@
     String filename = uuid.toString().replace("-", "");
     filename = filename + ext;
 
+    // 호출 값 디버깅
     System.out.println("category : " + category); 
     System.out.println("empId : " + empId); 
     System.out.println("filename : " + filename); 
@@ -46,7 +45,11 @@
     System.out.println("goodsAmount : " + goodsAmount); 
     System.out.println("goodsContent : " + goodsContent); 
     
+    // jsp에서의 쿼리실행문 연습
+    // DB 연결
     Connection conn = DBHelper.getConnection();
+    
+    // goods 테이블에 데이터 추가
     String sql = "insert into goods(category, emp_id, goods_title, filename, goods_content, goods_price, goods_amount, update_date, create_date) values(?,?,?,?,?,?,?, now(), now())";
     PreparedStatement stmt = conn.prepareStatement(sql);
 	stmt.setString(1,category);
@@ -57,10 +60,11 @@
 	stmt.setInt(6, goodsPrice);
 	stmt.setInt(7, goodsAmount);
     
+    // 디버깅
     System.out.println("stmt확인 : " + stmt);
-    
     int row = stmt.executeUpdate();
     
+    // 사진 업로드 성공 분기문
     if(row == 1) { // insert 성공하면 파일업로드
         // part -> is -> os -> 빈파일
         // 1)
@@ -79,14 +83,7 @@
         return;
     }
     
-    /* 
-    File df = new File(filePath, rs.getString("filename"));
-    df.delete(); 
-    */
-%>
-
-<!-- Controller Layer -->
-<%
+    // 추가상품 등록 성공 여부 분기문
     if(row == 1){
         response.sendRedirect("/shop/emp/goodsList.jsp?category=all");
     } else {

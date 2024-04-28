@@ -5,7 +5,7 @@
 <%
     System.out.println("=====writeReviewAction.jsp==========================================");
     
-    // 로그인 인증 분기
+    // 로그인 인증분기
     if(session.getAttribute("loginCus") == null) {
         String errMsg =  URLEncoder.encode("로그인을 먼저 해주세요.","utf-8");
         response.sendRedirect("/shop/customer/customerLoginForm.jsp?&errMsg="+errMsg);

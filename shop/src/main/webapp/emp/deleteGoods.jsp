@@ -37,5 +37,4 @@
     	System.out.println("상품 삭제 실패");
     	response.sendRedirect("/shop/emp/empList.jsp");
     }
-    
 %>

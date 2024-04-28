@@ -2,6 +2,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="java.net.*"%>
 <%@ page import="shop.dao.*" %>
+<!-- Model Layer -->
 <%
     System.out.println("=====goodsOne.jsp===========================================");
     
@@ -23,7 +24,9 @@
     // 해당 상품의 리뷰 목록 메서드
     ArrayList<HashMap<String, Object>> goodsOneReview = GoodsDAO.goodsOneReview(goodsNo);
     System.out.println("goodsOneReview : " + goodsOneReview);
-    
+%>
+<!-- Controller Layer -->
+<%
     // 카테고리 선택 메뉴
     ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
     System.out.println("categoryList : " + categoryList); 
@@ -32,6 +35,7 @@
     int allCnt = GoodsDAO.goodsListCnt("", "");
     System.out.println("allCount : " + allCnt); 
 %>
+<!-- View Layer -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +44,7 @@
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/shop/style.css" rel="stylesheet" type="text/css">    
+    <link href="/shop/style/style.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   .navbar-nav .nav-link,
@@ -89,148 +93,149 @@
           </div>
         </nav>
     
-    <!-- 상품상세정보 -->
-    <table class="table table-dark table-borderless">
-        <%
-            for(HashMap<String, Object> m : showGoods){
-        %>
-        <tr>
-            <td rowspan="4"><img style="width:70%; height:auto;" alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;"></td>
-            <td colspan="3"><h2><%=(String) (m.get("goodsTitle"))%></h2></td>
-            <td></td>
-            <td></td>
-        </tr>
-        
-        <tr>
-            <td></td>
-            <td><h3>판매가</h3></td>
-            <td><%=(Integer) (m.get("goodsPrice"))%></td>
-            <td></td>
-        </tr>
-        
-        <tr>
-            <td></td>
-            <td><h3>재고</h3></td>
-            <td><%=(Integer) (m.get("goodsAmount")) %></td>
-            <td></td>
-        </tr>
-        
-        <tr>
-            <td></td>
-            <td><h3>주문수량</h3></td>
-        <%
-            }
-        %>
-            <td>
-                <form method="post" action="/shop/customer/orderAction.jsp">
-                    <input type="hidden" name="goodsNo" value="<%=goodsNo %>">
-                    <%
-                    for(HashMap<String, Object> m : showGoods){
-                        if((Integer)(m.get("goodsAmount")) > 0){
-                    %>
-                    <input type="hidden" name="goodsAmount" value="<%=(Integer) (m.get("goodsAmount")) %>">
-                    <input type="hidden" name="goodsTitle" value="<%=(String) (m.get("goodsTitle")) %>">
-                    <select name="ea" class="form-select" aria-label="Default select example">
-                    <%
-                        for(int ea = 1; ea <= (Integer) (m.get("goodsAmount")); ea++){
-                            int sum = (((Integer) (m.get("goodsPrice")))*ea);
-                    %>
-                             <option value="<%=ea%>"><%=ea%>개 : <%=sum %> 원</option>`
-                    <%
-                            }
-                    %>
-                    </select>
-                    </td>
-                    
-                    <td>
-                    <button type="submit" class="btn btn-light">구매하기</button>
-                    <%        
-                        }else{
-                    %>
-                    <button type="submit" disabled="disabled">품절</button>
-                    <%        
-                        }
-                    }
-                    %>
-                </form>
-            </td>
-        </tr>
-        
-    </table>
-    
-    <hr>
-    <h1>상품설명</h1>
-    <table>
-        <tr>
-            <td colspan="3">
-                <%
-                    for(HashMap<String, Object> m : showGoods){
-                %>
-                        <%=(String) (m.get("goodsContent"))%></td>
-                <%
-                    }
-                %>
+        <!-- 상품상세정보 -->
+        <table class="table table-dark table-borderless">
+            <%
+                for(HashMap<String, Object> m : showGoods){
+            %>
+            <tr>
+                <td rowspan="4"><img style="width:70%; height:auto;" alt="상품사진" src="/shop/upload/<%=(String)(m.get("filename")) %>" style="width:100%; height:100%;"></td>
+                <td colspan="3"><h2><%=(String) (m.get("goodsTitle"))%></h2></td>
+                <td></td>
+                <td></td>
+            </tr>
             
-            </td>
-            <td>
-            </td>
-            <td></td>
-        </tr>
-    </table>
-    <hr>
+            <tr>
+                <td></td>
+                <td><h3>판매가</h3></td>
+                <td><%=(Integer) (m.get("goodsPrice"))%></td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td><h3>재고</h3></td>
+                <td><%=(Integer) (m.get("goodsAmount")) %></td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td><h3>주문수량</h3></td>
+            <%
+                }
+            %>
+                <td>
+                    <form method="post" action="/shop/customer/orderAction.jsp">
+                        <input type="hidden" name="goodsNo" value="<%=goodsNo %>">
+                        <%
+                        for(HashMap<String, Object> m : showGoods){
+                            if((Integer)(m.get("goodsAmount")) > 0){
+                        %>
+                        <input type="hidden" name="goodsAmount" value="<%=(Integer) (m.get("goodsAmount")) %>">
+                        <input type="hidden" name="goodsTitle" value="<%=(String) (m.get("goodsTitle")) %>">
+                        <select name="ea" class="form-select" aria-label="Default select example">
+                        <%
+                            for(int ea = 1; ea <= (Integer) (m.get("goodsAmount")); ea++){
+                                int sum = (((Integer) (m.get("goodsPrice")))*ea);
+                        %>
+                                 <option value="<%=ea%>"><%=ea%>개 : <%=sum %> 원</option>`
+                        <%
+                                }
+                        %>
+                        </select>
+                        </td>
+                        
+                        <td>
+                        <button type="submit" class="btn btn-light">구매하기</button>
+                        <%        
+                            }else{
+                        %>
+                        <button type="submit" disabled="disabled">품절</button>
+                        <%        
+                            }
+                        }
+                        %>
+                    </form>
+                </td>
+            </tr>
+            
+        </table>
+        
+        <hr>
+        <h1>상품설명</h1>
+        <table>
+            <tr>
+                <td colspan="3">
+                    <%
+                        for(HashMap<String, Object> m : showGoods){
+                    %>
+                            <%=(String) (m.get("goodsContent"))%></td>
+                    <%
+                        }
+                    %>
+                
+                </td>
+                <td>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <hr>
+        
     
-
-    <h1>리뷰</h1>
-    <table class="table table-dark table-borderless">
-        <tr>
-            <th>작성자</th>
-            <th>주문갯수</th>
-            <th>내용</th>
-            <th>별점</th>
-        </tr>
-        <%
-            for(HashMap<String, Object> m : goodsOneReview){
-        %>
-        <tr>
-            <td><%=(String) (m.get("cusId"))%></td>
-            <td><%=(Integer) (m.get("ea"))%></td>
-            <td><%=(String) (m.get("content"))%></td>
-            <td>
-        <%
-            if( (Integer)(m.get("rating")) == 5){
-        %>
-                &#127775;&#127775;&#127775;&#127775;&#127775;
-        <%
-            }else if( (Integer)(m.get("rating")) == 4){
-        %>
-                &#127775;&#127775;&#127775;&#127775;
-        <%
-            }else if( (Integer)(m.get("rating")) == 3){
-        %>
-                &#127775;&#127775;&#127775;
-        <%
-            }else if( (Integer)(m.get("rating")) == 2){
-        %>
-                &#127775;&#127775;
-        <%
-            }else if( (Integer)(m.get("rating")) == 1){
-        %>
-                &#127775;
-        <%
-            }else if( (Integer)(m.get("rating")) == 0){
-        %>
-                &nbsp;
-        <%
-            }
-        %>
-            </td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
-    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
+        <h1>리뷰</h1>
+        <table class="table table-dark table-borderless">
+            <tr>
+                <th>작성자</th>
+                <th>주문갯수</th>
+                <th>내용</th>
+                <th>별점</th>
+            </tr>
+            <%
+                for(HashMap<String, Object> m : goodsOneReview){
+            %>
+            <tr>
+                <td><%=(String) (m.get("cusId"))%></td>
+                <td><%=(Integer) (m.get("ea"))%></td>
+                <td><%=(String) (m.get("content"))%></td>
+                <td>
+            <%
+                if( (Integer)(m.get("rating")) == 5){
+            %>
+                    &#127775;&#127775;&#127775;&#127775;&#127775;
+            <%
+                }else if( (Integer)(m.get("rating")) == 4){
+            %>
+                    &#127775;&#127775;&#127775;&#127775;
+            <%
+                }else if( (Integer)(m.get("rating")) == 3){
+            %>
+                    &#127775;&#127775;&#127775;
+            <%
+                }else if( (Integer)(m.get("rating")) == 2){
+            %>
+                    &#127775;&#127775;
+            <%
+                }else if( (Integer)(m.get("rating")) == 1){
+            %>
+                    &#127775;
+            <%
+                }else if( (Integer)(m.get("rating")) == 0){
+            %>
+                    &nbsp;
+            <%
+                }
+            %>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+        <br> <br>
     </div>
+    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>

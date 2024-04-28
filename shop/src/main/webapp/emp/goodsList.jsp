@@ -39,7 +39,7 @@
         currentPage = Integer.parseInt(request.getParameter("currentPage"));
     }
 %>
-  <!-- Model Layer -->
+<!-- Controller Layer -->
 <%
     // 전체의 '갯수' 나타내기
     int allCnt = GoodsDAO.goodsListCnt("", "");
@@ -47,6 +47,9 @@
 
     // 카테고리 선택 메뉴
     ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
+%>
+  <!-- Model Layer -->
+<%
         
     // 페이징-------------------------------------------------------------------------------------
     int rowPerPage = 15;
@@ -72,10 +75,7 @@
 
     // 조건에 맞는 굿즈리스트
     ArrayList<HashMap<String, Object>> goodsList = GoodsDAO.selectGoodsList(category, searchWord, order, startRow, rowPerPage);
-    
     System.out.println("goodsList : " + goodsList); 
- 
-
 %>
 <!-- View Layer -->
 <!DOCTYPE html>
@@ -87,7 +87,7 @@
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/shop/style.css" rel="stylesheet" type="text/css">       
+    <link href="/shop/style/style.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   .carousel-item {
@@ -103,7 +103,7 @@
     color: white; /* 텍스트 색상을 흰색으로 지정 */
   }
 </style>
-<body class="bg-dark text-white" >
+<body class="bg-dark text-white">
     <div class="container">
     <!-- 메인메뉴 -->
        <nav class="navbar navbar-expand-lg bg-dark">
@@ -147,36 +147,33 @@
     
     <!-- 캐러셀 -->
     <div id="carouselExampleCaptions" class="carousel slide container">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="/shop/img/호그와트 교복 코스튬.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-item">
-          <img src="/shop/img/님부스 2000 주니어 한정판.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+            <img src="/shop/img/호그와트 교복 코스튬.jpeg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+                <div class="carousel-item">
+                <img src="/shop/img/님부스 2000 주니어 한정판.jpeg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item">
+                <img src="/shop/img/해리포터 지팡이.jpeg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
         </div>
-        <div class="carousel-item">
-          <img src="/shop/img/해리포터 지팡이.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
     
     
@@ -277,15 +274,15 @@
             if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
                 if(lastPage == 1){
         %>
-                    <a class="btn btn-light">&#60;&#60;</a>
-                    <a class="btn btn-light">&#60;</a>
-                    <a class="btn btn-light">&#62;</a>
-                    <a class="btn btn-light">&#62;&#62;</a>                        
+                    <a class="btn btn-dark">&#60;&#60;</a>
+                    <a class="btn btn-dark">&#60;</a>
+                    <a class="btn btn-dark">&#62;</a>
+                    <a class="btn btn-dark">&#62;&#62;</a>                        
         <%
                 }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
         %>
-                    <a class="btn btn-light">&#60;&#60;</a>
-                    <a class="btn btn-light">&#60;</a>
+                    <a class="btn btn-dark">&#60;&#60;</a>
+                    <a class="btn btn-dark">&#60;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
         <%      
@@ -293,8 +290,8 @@
         %>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                    <a class="btn btn-light">&#62;</a>
-                    <a class="btn btn-light">&#62;&#62;</a>
+                    <a class="btn btn-dark">&#62;</a>
+                    <a class="btn btn-dark">&#62;&#62;</a>
         <%      
                 } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
         %>
@@ -307,15 +304,15 @@
             }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
                 if(lastPage == 1){
         %>
-                    <a class="btn btn-light">&#60;&#60;</a>
-                    <a class="btn btn-light">&#60;</a>
-                    <a class="btn btn-light">&#62;</a>
-                    <a class="btn btn-light">&#62;&#62;</a>                        
+                    <a class="btn btn-dark">&#60;&#60;</a>
+                    <a class="btn btn-dark">&#60;</a>
+                    <a class="btn btn-dark">&#62;</a>
+                    <a class="btn btn-dark">&#62;&#62;</a>                        
         <%
                 }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
         %>
-                    <a class="btn btn-light">&#60;&#60;</a>
-                    <a class="btn btn-light">&#60;</a>
+                    <a class="btn btn-dark">&#60;&#60;</a>
+                    <a class="btn btn-dark">&#60;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
         <%      
@@ -323,8 +320,8 @@
         %>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
                     <a class="btn btn-light" href="/shop/emp/goodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                    <a class="btn btn-light">&#62;</a>
-                    <a class="btn btn-light">&#62;&#62;</a>
+                    <a class="btn btn-dark">&#62;</a>
+                    <a class="btn btn-dark">&#62;&#62;</a>
         <%      
                 } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
         %>

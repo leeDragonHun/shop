@@ -21,7 +21,6 @@
     
     // 톰캣서버 올린 사진파일삭제 메서드
     ResultSet dfn = EmpDAO.deleteFileName(categoryName);
-    
 	String filePath = request.getServletContext().getRealPath("upload");
     while(dfn.next()){
     	dfn.getString("filename"); 

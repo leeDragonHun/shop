@@ -3,7 +3,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="shop.dao.*" %>
 <%@ page import="java.net.*" %>
-<!-- Controller Layer -->
+<!-- Model Layer -->
 <%
     System.out.println("=====customerGoodsList.jsp==========================================");
 	// 인증분기	 : 세션변수 이름 - loginCus
@@ -15,9 +15,6 @@
     
     //  에러메시지 호출
 	String errMsg = request.getParameter("errMsg");
-    
-    // DB연동
-    Connection conn = DBHelper.getConnection();
     
     // category 값 요청
 	String category = request.getParameter("category");
@@ -43,16 +40,15 @@
     if (request.getParameter("currentPage") != null) {
         currentPage = Integer.parseInt(request.getParameter("currentPage"));
     }
-%>
-  <!-- Model Layer -->
-<%
     // 전체의 '갯수' 나타내기
     int allCnt = GoodsDAO.goodsListCnt("", "");
     System.out.println("allCount : " + allCnt);  
-
+%>
+<!-- Controller Layer -->
+<%
     // 카테고리 선택 메뉴
-    ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
-        
+    ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory();
+
 	// 페이징-------------------------------------------------------------------------------------
     int rowPerPage = 15;
     if(request.getParameter("rowPerPage") != null) {
@@ -74,13 +70,9 @@
 	System.out.println("lastPage : " + lastPage);
 	// ---------------------------------------------------------------------------------------------
 
-
     // 조건에 맞는 굿즈리스트
     ArrayList<HashMap<String, Object>> goodsList = GoodsDAO.selectGoodsList(category, searchWord, order, startRow, rowPerPage);
-	
 	System.out.println("goodsList : " + goodsList); 
- 
-
 %>
 <!-- View Layer -->
 <!DOCTYPE html>
@@ -92,7 +84,7 @@
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/shop/style.css" rel="stylesheet" type="text/css">    
+    <link href="/shop/style/style.css" rel="stylesheet" type="text/css">
 </head>
 <style>
   .carousel-item {
@@ -159,38 +151,34 @@
     
     <!-- 캐러셀 -->
     <div id="carouselExampleCaptions" class="carousel slide container">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="/shop/img/호그와트 교복 코스튬.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-item">
-          <img src="/shop/img/님부스 2000 주니어 한정판.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+            <img src="/shop/img/호그와트 교복 코스튬.jpeg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+                <div class="carousel-item">
+                <img src="/shop/img/님부스 2000 주니어 한정판.jpeg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item">
+                <img src="/shop/img/해리포터 지팡이.jpeg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
         </div>
-        <div class="carousel-item">
-          <img src="/shop/img/해리포터 지팡이.jpeg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    
     
 	<!-- 서브메뉴 카테고리별 상품리스트 -->
 	<div class="mt-3 container">
@@ -218,6 +206,7 @@
                </table>
             </div>
         </div>
+        
         <!-- 한 페이지에 표시할 갯수 정하기 -->
         <div>
             <table>
@@ -246,6 +235,7 @@
         </div>
     </div>
     
+    <!-- 상품목록 -->
     <div class="mt-3 container">
         <%
             for(HashMap<String, Object> m : goodsList){
@@ -290,15 +280,15 @@
                 if(searchWord == null || searchWord.equals("")){ // 검색어가 없을 때
                     if(lastPage == 1){
             %>
-                    	<a class="btn btn-light">&#60;&#60;</a>
-                        <a class="btn btn-light">&#60;</a>
-                        <a class="btn btn-light">&#62;</a>
-                        <a class="btn btn-light">&#62;&#62;</a>                        
+                    	<a class="btn btn-dark">&#60;&#60;</a>
+                        <a class="btn btn-dark">&#60;</a>
+                        <a class="btn btn-dark">&#62;</a>
+                        <a class="btn btn-dark">&#62;&#62;</a>                        
             <%
                     }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-light">&#60;&#60;</a>
-                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-dark">&#60;&#60;</a>
+                        <a class="btn btn-dark">&#60;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%      
@@ -306,8 +296,8 @@
             %>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-light">&#62;</a>
-                        <a class="btn btn-light">&#62;&#62;</a>
+                        <a class="btn btn-dark">&#62;</a>
+                        <a class="btn btn-dark">&#62;&#62;</a>
             <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
             %>
@@ -320,15 +310,15 @@
                 }else if(searchWord != null || !searchWord.equals("")){ // 검색어가 있을 때
                     if(lastPage == 1){
             %>
-                        <a class="btn btn-light">&#60;&#60;</a>
-                        <a class="btn btn-light">&#60;</a>
-                        <a class="btn btn-light">&#62;</a>
-                        <a class="btn btn-light">&#62;&#62;</a>                        
+                        <a class="btn btn-dark">&#60;&#60;</a>
+                        <a class="btn btn-dark">&#60;</a>
+                        <a class="btn btn-dark">&#62;</a>
+                        <a class="btn btn-dark">&#62;&#62;</a>                        
             <%
                     }else if(currentPage == 1) {/* 첫 페이지 화살표(이전과 처음 화살표 회색으로 비활성화) */
             %>
-                        <a class="btn btn-light">&#60;&#60;</a>
-                        <a class="btn btn-light">&#60;</a>
+                        <a class="btn btn-dark">&#60;&#60;</a>
+                        <a class="btn btn-dark">&#60;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage+1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=lastPage%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#62;&#62;</a>
             <%      
@@ -336,8 +326,8 @@
             %>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=1&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;&#60;</a>
                         <a class="btn btn-light" href="/shop/customer/customerGoodsList.jsp?searchWord=<%=searchWord %>&category=<%=category %>&currentPage=<%=currentPage-1%>&order=<%=order %>&rowPerPage=<%=rowPerPage%>">&#60;</a>
-                        <a class="btn btn-light">&#62;</a>
-                        <a class="btn btn-light">&#62;&#62;</a>
+                        <a class="btn btn-dark">&#62;</a>
+                        <a class="btn btn-dark">&#62;&#62;</a>
             <%      
                     } else { /* 2페이지 부터 마지막 바로 전페이지 까지 화살표 */
             %>
@@ -353,59 +343,31 @@
     	<br>
         
         <table style="margin-left:auto; margin-right:auto;">
-        <form mothod="get" action="/shop/customer/customerGoodsList.jsp">
-            <input type="hidden" name="order" value="<%=order %>">
-            <input type="hidden" name="rowPerPage" value="<%=rowPerPage%>">
-            <tr>
-                <td>상품 검색</td>
-                <td>
-                    <select name="category" class="form-select" aria-label="Default select example">
-                    <option value="all">전체</option>
-                    <%
-                        for(HashMap m : categoryList) {
-                    %>
-                            <option value="<%=(String)(m.get("category"))%>"><%=(String)(m.get("category"))%></option>
-                    <%
-                        }
-                    %>
-                    </select>
-                </td>
-                <td><input type="text" name="searchWord" class="form-control"></td>
-                <td><button type="submit" class="btn btn-light">검색</button></td>
-            </tr>
-        </form>
+            <form mothod="get" action="/shop/customer/customerGoodsList.jsp">
+                <input type="hidden" name="order" value="<%=order %>">
+                <input type="hidden" name="rowPerPage" value="<%=rowPerPage%>">
+                <tr>
+                    <td>상품 검색</td>
+                    <td>
+                        <select name="category" class="form-select" aria-label="Default select example">
+                        <option value="all">전체</option>
+                        <%
+                            for(HashMap m : categoryList) {
+                        %>
+                                <option value="<%=(String)(m.get("category"))%>"><%=(String)(m.get("category"))%></option>
+                        <%
+                            }
+                        %>
+                        </select>
+                    </td>
+                    <td><input type="text" name="searchWord" class="form-control"></td>
+                    <td><button type="submit" class="btn btn-light">검색</button></td>
+                </tr>
+            </form>
         </table>
     </div>
-    
-    <!-- 푸터 -->
-    <footer>
-        <div class="container">
-            <div>
-                POTER MORE
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-                <!-- 왼쪽열 -->
-                <div>
-                    <b>상호명 : </b>(주) POTER MORE<br>
-                    <b>대표자명 : 이용훈</b><br>
-                    <b>사업장주소 : </b>서울특별시 금천구 가산디지털2로 95 KM타워 3층<br>
-                    <b>대표전화 : </b>02-1234-5678<br>
-                    <b>사업자 등록번호 : </b>333-22-55555<br>
-                    <b>통신판매업 신고번호 : </b>2024-서울금천-4444<br>
-                    <b>개인정보보호책임자 : </b>이용훈<br>
-                </div>
-                
-                <!-- 오른쪽열 -->
-                <div>
-                    <b>상담/주문 전화 : </b>010-1234-5678<br>
-                    <b>상담/주문 메일 : </b>yonghun@lee.com<br>
-                    <b>CS 운영시간 : </b>평일 : 10:00 ~ 17:00 공휴일 휴무<br>
-                    <b>무통장 계좌정보 : </b>국민은행 12489576171020 (주)POTERMORE<br>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <br> <br>
+    <jsp:include page="/emp/inc/footer.jsp"></jsp:include>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>

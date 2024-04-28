@@ -3,39 +3,34 @@
 <%@ page import="shop.dao.*" %>
 <%
     System.out.println("=====addCustomerAction.jsp====================================");
+
+    //로그인 인증분기
     if(session.getAttribute("loginCus")  != null) {
         response.sendRedirect("/shop/customer/customerGoodsList.jsp");
         return;
     }
-
+    
+    // 호출값 인코딩
     request.setCharacterEncoding("UTF-8");
     
+    // 호출값들
     String id = request.getParameter("id");
     String pw = request.getParameter("pw");
     String name = request.getParameter("name");
     String birth = request.getParameter("birth");
     String gender = request.getParameter("gender");
     
+    // 호출값 디버깅
     System.out.println("id : " + id);
     System.out.println("pw : " + pw);
     System.out.println("name : " + name);
     System.out.println("birth : " + birth);
     System.out.println("gender : " + gender);
     
+    // 회원가입 메서드
     int row = CustomerDAO.insertCustomer(id, pw, name, birth, gender);
-/*     Connection conn = DBHelper.getConnection();
-    String sql = "INSERT INTO customer(cus_id, cus_pw, cus_name, birth, gender, update_date, create_date) VALUES(?, password(?), ?, ?, ?, NOW(), NOW())";
-    PreparedStatement stmt = conn.prepareStatement(sql);
     
-    stmt.setString(1,id);
-    stmt.setString(2,pw);
-    stmt.setString(3,name);
-    stmt.setString(4,birth);
-    stmt.setString(5,gender);
-    System.out.println("stmt확인 : " + stmt);
-    
-    int row = stmt.executeUpdate(); */
-    
+    // 회원가입 분기문
     if(row >= 1){
         System.out.println("회원가입 완료");
         response.sendRedirect("/shop/customer/customerLoginForm.jsp");
@@ -43,5 +38,4 @@
         System.out.println("회원가입 실패");
         response.sendRedirect("/shop/customer/addCustomerForm.jsp");
     }
-    
 %>

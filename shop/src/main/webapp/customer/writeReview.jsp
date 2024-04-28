@@ -2,6 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.net.*" %>
 <%@ page import="shop.dao.*" %>
+<!-- Model Layer -->
 <%
     System.out.println("=====writeReview.jsp==========================================");
 
@@ -24,7 +25,9 @@
     System.out.println("상품번호 : " + ordersNo);
     String goodsTitle = request.getParameter("goodsTitle");
     System.out.println("상품이름 : " + goodsTitle);
-    
+%>
+<!-- Controller Layer -->
+<%
     // 카테고리 선택 메뉴
     ArrayList<HashMap<String, Object>> categoryList = GoodsDAO.selectCategory(); 
     System.out.println("categoryList : " + categoryList); 
@@ -33,6 +36,7 @@
     int allCnt = GoodsDAO.goodsListCnt("", "");
     System.out.println("allCount : " + allCnt); 
 %>
+<!-- View Layer -->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -41,43 +45,43 @@
     <link rel="shortcut icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link rel="icon" href="/shop/mindMap/d.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/shop/style.css" rel="stylesheet" type="text/css">    
+    <link href="/shop/style/style.css" rel="stylesheet" type="text/css">
 </head>
 <style>
-.star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-  justify-content: space-around;
-  padding: 0 0.2em;
-  text-align: center;
-  width: 5em;
-}
- 
-.star-rating input {
-  display: none;
-}
- 
-.star-rating label {
-  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
-  -webkit-text-stroke-width: 2.3px;
-  -webkit-text-stroke-color: white;
-  cursor: pointer;
-}
- 
-.star-rating :checked ~ label {
-  -webkit-text-fill-color: gold;
-}
- 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  -webkit-text-fill-color: #fff58c;
-}
-  .navbar-nav .nav-link,
-  .navbar-toggler-icon {
-    color: white; /* 텍스트 색상을 흰색으로 지정 */
-  }
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+      justify-content: space-around;
+      padding: 0 0.2em;
+      text-align: center;
+      width: 5em;
+    }
+     
+    .star-rating input {
+      display: none;
+    }
+     
+    .star-rating label {
+      -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 2.3px;
+      -webkit-text-stroke-color: white;
+      cursor: pointer;
+    }
+     
+    .star-rating :checked ~ label {
+      -webkit-text-fill-color: gold;
+    }
+     
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      -webkit-text-fill-color: #fff58c;
+    }
+      .navbar-nav .nav-link,
+      .navbar-toggler-icon {
+        color: white; /* 텍스트 색상을 흰색으로 지정 */
+      }
 </style>
 <body class="bg-dark text-white" >
     <div class="container">
@@ -120,45 +124,45 @@
           </div>
         </nav>
     
-    <h1>리뷰작성</h1>
-    <form method="post" action="/shop/customer/writeReviewAction.jsp">
-        <input type="hidden" name="ordersNo" value="<%=ordersNo %>">
-        <input type="hidden" name="cusId" value="<%=cusId %>">
-        <input type="hidden" name="goodsTitle" value="<%=goodsTitle %>">
-        <table>
-            <tr>
-                <td>
-                    <textarea class="form-control" name="content" rows="10" cols="100" placeholder="리뷰를 입력하세요."></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="star-rating space-x-4 mx-auto">
-                        <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
-                        <label for="5-stars" class="star pr-4">★</label>
-                        <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
-                        <label for="4-stars" class="star">★</label>
-                        <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
-                        <label for="3-stars" class="star">★</label>
-                        <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
-                        <label for="2-stars" class="star">★</label>
-                        <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
-                        <label for="1-star" class="star">★</label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" class="btn btn-light">리뷰작성</button>
-                </td>
-            </tr>
-        </table>
-        
-
-    </form>
-    <br>
-    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
+        <h1>리뷰작성</h1>
+        <form method="post" action="/shop/customer/writeReviewAction.jsp">
+            <input type="hidden" name="ordersNo" value="<%=ordersNo %>">
+            <input type="hidden" name="cusId" value="<%=cusId %>">
+            <input type="hidden" name="goodsTitle" value="<%=goodsTitle %>">
+            <table>
+                <tr>
+                    <td>
+                        <textarea class="form-control" name="content" rows="10" cols="100" placeholder="리뷰를 입력하세요."></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="star-rating space-x-4 mx-auto">
+                            <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+                            <label for="5-stars" class="star pr-4">★</label>
+                            <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                            <label for="4-stars" class="star">★</label>
+                            <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                            <label for="3-stars" class="star">★</label>
+                            <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                            <label for="2-stars" class="star">★</label>
+                            <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                            <label for="1-star" class="star">★</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-light">리뷰작성</button>
+                    </td>
+                </tr>
+            </table>
+            
+    
+        </form>
+        <br> <br>
     </div>
+    <jsp:include page="/customer/inc/footer.jsp"></jsp:include>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
 </body>
 </html>
