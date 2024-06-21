@@ -1,6 +1,6 @@
 
 
-# 쇼핑몰 프로젝트[바로가기](http://52.79.169.153/shop/customer/customerLoginForm.jsp)
+# 쇼핑몰 프로젝트 [바로가기](http://52.79.169.153/shop/customer/customerLoginForm.jsp)
 ## 🗺️ 마인드맵 
 ![shopProject](https://github.com/leeDragonHun/shop/assets/145954981/e1f140fc-c72b-4351-a12d-23b3c79a7055)
 
